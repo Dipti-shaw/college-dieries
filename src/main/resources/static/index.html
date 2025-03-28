@@ -3,86 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College_Dieries</title>
+    <title>College Diaries</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="auth-container">
-        <div id="login-form">
-            <h2>Login</h2>
-            <input type="number" id="login-userId" placeholder="User ID">
-            <input type="text" id="login-userType" placeholder="User Type">
-            <button id="login-btn">Login</button>
+        <!-- Login Form -->
+        <form id="login-form" aria-labelledby="login-heading" class="form-container">
+            <h2 id="login-heading">Login</h2>
+            <label for="login-userId">User ID</label>
+            <input type="number" id="login-userId" placeholder="User ID" required>
+            
+            <label for="login-userType">User Type</label>
+            <select id="login-userType" required>
+                <option value="" disabled selected>Select User Type</option>
+                <option value="student">Student</option>
+                <option value="faculty">Faculty</option>
+                <option value="admin">Admin</option>
+                <option value="staff">Staff</option>
+            </select>
+
+            <button type="submit" id="login-btn">Login</button>
             <p>Not registered? <a href="#" id="show-signup">Sign Up</a></p>
-        </div>
+        </form>
 
-        <div id="signup-form" style="display: none;">
-            <h2>Sign Up</h2>
-            <input type="number" id="signup-userId" placeholder="User ID">
-            <input type="text" id="signup-userType" placeholder="User Type">
-            <input type="text" id="signup-userName" placeholder="User Name">
-            <input type="number" id="signup-phone" placeholder="Phone">
-            <input type="email" id="signup-email" placeholder="Email">
-            <input type="text" id="signup-department" placeholder="Department">
-            <input type="text" id="signup-batch" placeholder="Batch">
-            <input type="text" id="signup-branch" placeholder="Branch">
-            <input type="text" id="signup-field" placeholder="Field">
-            <input type="text" id="signup-gymkhanaPos" placeholder="Gymkhana Position">
-            <button id="signup-btn">Sign Up</button>
+        <!-- Signup Form -->
+        <form id="signup-form" style="display: none;" aria-labelledby="signup-heading" class="form-container">
+            <h2 id="signup-heading">Sign Up</h2>
+            
+            <label for="signup-userId">User ID</label>
+            <input type="number" id="signup-userId" placeholder="User ID" required>
+        
+            <label for="signup-userType">User Type</label>
+            <select id="signup-userType" required>
+                <option value="" disabled selected>Select User Type</option>
+                <option value="student">Student</option>
+                <option value="faculty">Faculty</option>
+                <option value="admin">Admin</option>
+            </select>
+        
+            <label for="signup-userName">User Name</label>
+            <input type="text" id="signup-userName" placeholder="User Name" required>
+        
+            <label for="signup-phone">Phone</label>
+            <input type="tel" id="signup-phone" placeholder="Phone Number" required>
+        
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" placeholder="Email Address" required>
+        
+            <label for="signup-department">Department</label>
+            <select id="signup-department" required>
+                <option value="" disabled selected>Select Department</option>
+                <option value="cse">Computer Science & Engineering (CSE)</option>
+                <option value="ece">Electronics & Communication (ECE)</option>
+                <!-- Add more departments as needed -->
+            </select>
+        
+            <label for="signup-batch">Batch Year</label>
+            <select id="signup-batch" required>
+                <option value="" disabled selected>Select Batch Year</option>
+                <!-- Populate years dynamically if needed -->
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <!-- Add more years as needed -->
+            </select>
+        
+            <label for="signup-branch">Branch</label>
+            <select id="signup-branch" required>
+                <option value="" disabled selected>Select Branch</option>
+                <!-- Populate branches dynamically if needed -->
+                <option value="cse">CSE</option>
+                <option value="ece">ECE</option>
+                <!-- Add more branches as needed -->
+            </select>
+        
+            <!-- Submit Button -->
+            <button type="submit" id="signup-btn">Sign Up</button>
+        
+            <!-- Login Link -->
             <p>Already registered? <a href="#" id="show-login">Login</a></p>
-        </div>
-    </div>
-
-    <!-- Main content (hidden until login) -->
-    <div id="main-content" style="display: none;">
-        <header>
-            <div class="top-bar">
-                <div class="profile-btn">
-                    <button id="profileBtn">Profile</button>
-                </div>
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Search users...">
-                    <button id="searchBtn">Search</button>
-                </div>
-            </div>
-        </header>
-
-        <main>
-            <div class="section-buttons">
-                <button class="section-btn active" data-section="stories">Stories</button>
-                <button class="section-btn" data-section="market">Market</button>
-                <button class="section-btn" data-section="club">Club</button>
-                <button class="section-btn" data-section="board">Cultural & Technical Board</button>
-            </div>
-
-            <div class="content" id="contentArea">
-                <!-- Default Stories Section -->
-                <div class="section active" id="stories">
-                    <h2>Stories Section</h2>
-                    <p>Welcome to the home page! Share notes, achievements, and announcements here.</p>
-                </div>
-
-                <!-- Market Section -->
-                <div class="section" id="market">
-                    <h2>Market Section</h2>
-                    <p>Sell or lend items you no longer need.</p>
-                </div>
-
-                <!-- Club Section -->
-                <div class="section" id="club">
-                    <h2>Club Section</h2>
-                    <p>Join clubs, participate in events, and connect with fellow students.</p>
-                </div>
-
-                <!-- Cultural & Technical Board Section -->
-                <div class="section" id="board">
-                    <h2>Cultural & Technical Board</h2>
-                    <p>Stay updated with club events and announcements.</p>
-                </div>
-            </div>
-        </main>
-    </div>
-
+        </form>
+        
+    <!-- Include your JavaScript file -->
     <script src="script.js"></script>
+
+    <!-- Optionally include jQuery or other libraries if needed -->
+    <!-- Example: jQuery CDN -->
+    <!--
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script> 
+    -->
+    
+    <!-- Include any additional scripts or libraries here -->
+    
+    <!-- Optional: Include a footer or additional content -->
+    
+    <!-- Optional: Include a custom script to handle form toggling -->
+    
+    <!-- Example: Simple script to toggle between login and signup forms -->
+    
 </body>
 </html>
+
