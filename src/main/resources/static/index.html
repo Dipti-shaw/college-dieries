@@ -4,108 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Diaries</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
 </head>
 <body>
     <div id="auth-container">
         <!-- Login Form -->
         <form id="login-form" aria-labelledby="login-heading" class="form-container">
-            <h2 id="login-heading">Login</h2>
-            <label for="login-userId">User ID</label>
-            <input type="number" id="login-userId" placeholder="User ID" required>
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h2>College Diaries</h2>
+            </div>
             
-            <label for="login-userType">User Type</label>
-            <select id="login-userType" required>
-                <option value="" disabled selected>Select User Type</option>
-                <option value="student">Student</option>
-                <option value="faculty">Faculty</option>
-                <option value="admin">Admin</option>
-                <option value="staff">Staff</option>
-            </select>
+            <h2 id="login-heading">Welcome Back</h2>
+            
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <label for="login-userId">User ID</label>
+                <input type="number" id="login-userId" placeholder="Enter your user ID" required>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-user-tag"></i>
+                <label for="login-userType">User Type</label>
+                <select id="login-userType" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                    <option value="admin">Admin</option>
+                    <option value="staff">Staff</option>
+                </select>
+            </div>
 
-            <button type="submit" id="login-btn">Login</button>
-            <p>Not registered? <a href="#" id="show-signup">Sign Up</a></p>
+            <button type="submit" id="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+            
+            <div class="form-footer">
+                <p>Not registered? <a href="#" id="show-signup">Create an account</a></p>
+            </div>
         </form>
 
         <!-- Signup Form -->
         <form id="signup-form" style="display: none;" aria-labelledby="signup-heading" class="form-container">
-            <h2 id="signup-heading">Sign Up</h2>
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h2>College Diaries</h2>
+            </div>
             
-            <label for="signup-userId">User ID</label>
-            <input type="number" id="signup-userId" placeholder="User ID" required>
-        
-            <label for="signup-userType">User Type</label>
-            <select id="signup-userType" required>
-                <option value="" disabled selected>Select User Type</option>
-                <option value="student">Student</option>
-                <option value="faculty">Faculty</option>
-                <option value="admin">Admin</option>
-            </select>
-        
-            <label for="signup-userName">User Name</label>
-            <input type="text" id="signup-userName" placeholder="User Name" required>
-        
-            <label for="signup-phone">Phone</label>
-            <input type="tel" id="signup-phone" placeholder="Phone Number" required>
-        
-            <label for="signup-email">Email</label>
-            <input type="email" id="signup-email" placeholder="Email Address" required>
-        
-            <label for="signup-department">Department</label>
-            <select id="signup-department" required>
-                <option value="" disabled selected>Select Department</option>
-                <option value="cse">Computer Science & Engineering (CSE)</option>
-                <option value="ece">Electronics & Communication (ECE)</option>
-                <!-- Add more departments as needed -->
-            </select>
-        
-            <label for="signup-batch">Batch Year</label>
-            <select id="signup-batch" required>
-                <option value="" disabled selected>Select Batch Year</option>
-                <!-- Populate years dynamically if needed -->
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <!-- Add more years as needed -->
-            </select>
-        
-            <label for="signup-branch">Branch</label>
-            <select id="signup-branch" required>
-                <option value="" disabled selected>Select Branch</option>
-                <!-- Populate branches dynamically if needed -->
-                <option value="cse">CSE</option>
-                <option value="ece">ECE</option>
-                <!-- Add more branches as needed -->
-            </select>
-        
-            <!-- Submit Button -->
-            <button type="submit" id="signup-btn">Sign Up</button>
-        
-            <!-- Login Link -->
-            <p>Already registered? <a href="#" id="show-login">Login</a></p>
+            <h2 id="signup-heading">Create Account</h2>
+            
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <label for="signup-userId">User ID</label>
+                <input type="number" id="signup-userId" placeholder="Enter your user ID" required>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-user-tag"></i>
+                <label for="signup-userType">User Type</label>
+                <select id="signup-userType" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-id-card"></i>
+                <label for="signup-userName">Full Name</label>
+                <input type="text" id="signup-userName" placeholder="Enter your full name" required>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <label for="signup-phone">Phone Number</label>
+                <input type="tel" id="signup-phone" placeholder="Enter your phone number" required>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <label for="signup-email">Email Address</label>
+                <input type="email" id="signup-email" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-building"></i>
+                <label for="signup-department">Department</label>
+                <select id="signup-department" required>
+                    <option value="" disabled selected>Select department</option>
+                    <option value="cse">Computer Science & Engineering (CSE)</option>
+                    <option value="ece">Electronics & Communication (ECE)</option>
+                    <option value="mech">Mechanical Engineering</option>
+                    <option value="civil">Civil Engineering</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-calendar-alt"></i>
+                <label for="signup-batch">Batch Year</label>
+                <select id="signup-batch" required>
+                    <option value="" disabled selected>Select batch year</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-code-branch"></i>
+                <label for="signup-branch">Branch</label>
+                <select id="signup-branch" required>
+                    <option value="" disabled selected>Select branch</option>
+                    <option value="cse">CSE</option>
+                    <option value="ece">ECE</option>
+                    <option value="mech">Mechanical</option>
+                    <option value="civil">Civil</option>
+                </select>
+            </div>
+
+            <button type="submit" id="signup-btn">
+                <i class="fas fa-user-plus"></i> Sign Up
+            </button>
+            
+            <div class="form-footer">
+                <p>Already have an account? <a href="#" id="show-login">Login here</a></p>
+            </div>
         </form>
-        
-    <!-- Include your JavaScript file -->
+    </div>
     <script src="script.js"></script>
 
-    <!-- Optionally include jQuery or other libraries if needed -->
-    <!-- Example: jQuery CDN -->
-    <!--
-    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script> 
-    -->
-    
-    <!-- Include any additional scripts or libraries here -->
-    
-    <!-- Optional: Include a footer or additional content -->
-    
-    <!-- Optional: Include a custom script to handle form toggling -->
-    
-    <!-- Example: Simple script to toggle between login and signup forms -->
-    
 </body>
 </html>
-
