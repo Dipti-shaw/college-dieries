@@ -4,7 +4,7 @@ public class User {
     private int userId;
     private String userType;
     private String userName;
-    private int phone;
+    private String phone;
     private String email;
     private String department;
     private String batch;
@@ -13,7 +13,7 @@ public class User {
     private String gymkhanaPos;
 
     // Constructor
-    public User(int userId, String userType, String userName, int phone, String email, 
+    public User(int userId, String userType, String userName, String phone, String email, 
                 String department, String batch, String branch, String field, String gymkhanaPos) {
         this.userId = userId;
         this.userType = userType;
@@ -40,7 +40,7 @@ public class User {
         return userName;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
@@ -81,7 +81,7 @@ public class User {
         this.userName = userName;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
