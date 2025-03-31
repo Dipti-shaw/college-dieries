@@ -25,6 +25,7 @@ public class UserDAO {
             stmt.setString(10, user.getGymkhanaPos());
 
             stmt.executeUpdate();
+            System.err.println("user added to database");
         } catch (SQLException e) {
             e.printStackTrace();
         }

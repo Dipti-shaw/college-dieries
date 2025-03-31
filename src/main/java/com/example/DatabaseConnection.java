@@ -10,6 +10,7 @@ public class DatabaseConnection {
 
     public static Connection getConnection() {
         try {
+            System.err.println("databasse connected succesfully");
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             e.printStackTrace();

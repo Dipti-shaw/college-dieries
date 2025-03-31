@@ -71,12 +71,36 @@
 
             <div id="manage-profile" class="section">
                 <h3>Manage Profile</h3>
-                <p>Update your personal information, profile picture, and preferences here.</p>
-                <!-- Add form fields for profile management here -->
+                <div id="user-info">
+                    <p><strong>User ID:</strong> <span id="user-id"></span></p>
+                    <p><strong>User Type:</strong> <span id="user-type"></span></p>
+                    <p><strong>Name:</strong> <span id="user-name"></span></p>
+                    <p><strong>Phone:</strong> <span id="user-phone"></span></p>
+                    <p><strong>Email:</strong> <span id="user-email"></span></p>
+                    <p><strong>Department:</strong> <span id="user-department"></span></p>
+                    <p><strong>Batch:</strong> <span id="user-batch"></span></p>
+                    <p><strong>Branch:</strong> <span id="user-branch"></span></p>
+                    <p><strong>Field:</strong> <span id="user-field"></span></p>
+                    <p><strong>Gymkhana Position:</strong> <span id="user-gymkhana-pos"></span></p>
+                </div>
+                <button id="edit-profile-btn">Edit Profile</button>
             </div>
 
             <div id="stories" class="section">
                 <h3>Stories & Study Material</h3>
+                <div class="card">
+                    <form id="add-story-form">
+                        <div class="input-group">
+                            <label for="story-posts">Story Content</label>
+                            <textarea id="story-posts" placeholder="Enter your story or study material" required></textarea>
+                        </div>
+                        <button type="submit">Add Story</button>
+                    </form>
+                </div>
+                <div id="stories-list">
+                    <!-- Stories will be dynamically added here -->
+                </div>
+            </div>
                 <div class="card">
                     <p>Shared Notes: Calculus 101 - <a href="#">Download PDF</a></p>
                 </div>
