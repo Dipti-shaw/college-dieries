@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 console.log('Story response:', data);
-                alert(data);
+                //alert(data);
                 document.getElementById('story-posts').value = '';
                 loadStories(); // Refresh stories
             })
@@ -197,3 +197,5 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('add-story-form not found');
     }
 });
+
+// do not change area___________________________________________________________________________________________________________________________________________________
