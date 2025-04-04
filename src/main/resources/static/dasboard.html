@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Dairies Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="dashboard.css" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+    <div class="header">
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1>Campus Dairies</h1>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Campus Dairies Dashboard</h1>
+            </div>
+            <div class="sidebar-nav">
+                <ul>
+                    <li id="nav-home" class="active" onclick="showSection('home', this)">
+                        <i class="fas fa-home"></i> Home
+                    </li>
+                    <li id="nav-stories" onclick="showSection('stories', this)">
+                        <i class="fas fa-book"></i> Stories
+                    </li>
+                    <li id="nav-bazaar" onclick="showSection('bazaar', this)">
+                        <i class="fas fa-shopping-cart"></i> Bazaar
+                    </li>
+                    <li id="nav-announcements" onclick="showSection('announcements', this)">
+                        <i class="fas fa-bullhorn"></i> Announcements
+                    </li>
+                    <li id="nav-clubs" onclick="showSection('clubs', this)">
+                        <i class="fas fa-users"></i> Clubs
+                    </li>
+                </ul>
+            </div>
+            <div class="profile-section" onclick="showSection('manage-profile', document.getElementById('nav-home'))">
+                <i class="fas fa-user"></i> Profile
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div id="home" class="section active">
+                <h3>Welcome to Campus Dairies!</h3>
+                <p>Explore the various sections below to connect, learn, and engage with your campus community.</p>
+                <div class="home-grid">
+                    <div class="home-card" onclick="showSection('stories', document.getElementById('nav-stories'))">
+                        <i class="fas fa-book"></i>
+                        <p>Stories & Study Material</p>
+                    </div>
+                    <div class="home-card" onclick="showSection('bazaar', document.getElementById('nav-bazaar'))">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Bazaar</p>
+                    </div>
+                    <div class="home-card" onclick="showSection('announcements', document.getElementById('nav-announcements'))">
+                        <i class="fas fa-bullhorn"></i>
+                        <p>Announcements</p>
+                    </div>
+                    <div class="home-card" onclick="showSection('clubs', document.getElementById('nav-clubs'))">
+                        <i class="fas fa-users"></i>
+                        <p>Clubs</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="manage-profile" class="section">
+                <h3>Manage Profile</h3>
+                <p>Update your personal information, profile picture, and preferences here.</p>
+                <!-- Add form fields for profile management here -->
+            </div>
+
+            <div id="stories" class="section">
+                <h3>Stories & Study Material</h3>
+                <div class="card">
+                    <p>Shared Notes: Calculus 101 - <a href="#">Download PDF</a></p>
+                </div>
+                <div class="card">
+                    <p>Study Material: Physics Cheat Sheet - <a href="#">View</a></p>
+                </div>
+            </div>
+
+            <div id="bazaar" class="section">
+                <h3>Bazaar</h3>
+                <div class="bazaar-grid">
+                    <div class="card">
+                        <p>For Sale: Used Textbook - $15</p>
+                        <button>Contact Seller</button>
+                    </div>
+                    <div class="card">
+                        <p>Wanted: Graphing Calculator</p>
+                        <button>Offer Item</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="announcements" class="section">
+                <h3>Announcements</h3>
+                <div class="card">
+                    <p>Student Council: Club Fair on March 30, 2025</p>
+                </div>
+                <div class="card">
+                    <p>Teacher: Assignment due April 5, 2025</p>
+                </div>
+            </div>
+
+            <div id="clubs" class="section">
+                <h3>Clubs</h3>
+                <div class="card">
+                    <p>Photography Club - Meets every Wednesday</p>
+                </div>
+                <div class="card">
+                    <p>Debate Club - Join our next event!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="dashboard.js"></script>
+
+</body>
+</html>
