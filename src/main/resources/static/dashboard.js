@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+//meri ladki ko mt cher___________________________________________________________________________________________________________________________
+
     // Fetch and display stories
     function loadStories() {
         fetch('http://localhost:8080/api/users/stories', {
@@ -83,12 +85,60 @@ document.addEventListener('DOMContentLoaded', function() {
                 storyElement.innerHTML = `
                     <h4>${story.userName}</h4>
                     <p>${story.posts}</p>
+                    <div class="story-actions">
+                        <button class="like-btn" data-userid="${story.userId}" data-usertype="${story.userType}" data-timestamp="${story.timestamp}">
+                            Like (${story.likeCount})
+                        </button>
+                        <button class="dislike-btn" data-userid="${story.userId}" data-usertype="${story.userType}" data-timestamp="${story.timestamp}">
+                            Dislike (${story.dislikeCount})
+                        </button>
+                    </div>
                 `;
                 storiesList.appendChild(storyElement);
+            });
+
+            // Add event listeners for like/dislike buttons
+            document.querySelectorAll('.like-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const userId = this.getAttribute('data-userid');
+                    const userType = this.getAttribute('data-usertype');
+                    const timestamp = this.getAttribute('data-timestamp');
+                    updateStoryAction(userId, userType, timestamp, 'like');
+                });
+            });
+
+            document.querySelectorAll('.dislike-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const userId = this.getAttribute('data-userid');
+                    const userType = this.getAttribute('data-usertype');
+                    const timestamp = this.getAttribute('data-timestamp');
+                    updateStoryAction(userId, userType, timestamp, 'dislike');
+                });
             });
         })
         .catch(error => {
             console.error('Error fetching stories:', error);
+        });
+    }
+
+    function updateStoryAction(userId, userType, timestamp, action) {
+        const endpoint = action === 'like' ? '/api/users/stories/like' : '/api/users/stories/dislike';
+        fetch(`http://localhost:8080${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: parseInt(userId), userType, timestamp })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error(`Failed to ${action} story: ${response.status}`);
+            return response.text();
+        })
+        .then(data => {
+            console.log(`${action} response:`, data);
+            loadStories(); // Refresh stories to update counts
+        })
+        .catch(error => {
+            console.error(`Error ${action}ing story:`, error);
+            alert(`Failed to ${action} story: ${error.message}`);
         });
     }
 

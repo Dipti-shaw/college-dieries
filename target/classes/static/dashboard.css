@@ -267,3 +267,30 @@
                 font-size: 20px;
             }
         }
+
+
+        .story-actions {
+            margin-top: 10px;
+        }
+        
+        .like-btn, .dislike-btn {
+            padding: 5px 10px;
+            margin-right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .like-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .dislike-btn {
+            background-color: #dc3545;
+        }
+        
+        .dislike-btn:hover {
+            background-color: #b02a37;
+        }
