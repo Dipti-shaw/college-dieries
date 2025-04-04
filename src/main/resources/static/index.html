@@ -69,9 +69,9 @@
                     <option value="student">Student</option>
                     <option value="faculty">Faculty</option>
                     <option value="admin">Admin</option>
+                    <option value="staff">Staff</option>
                 </select>
             </div>
-            
             <div class="input-group">
                 <i class="fas fa-id-card"></i>
                 <label for="signup-userName">Full Name</label>
@@ -95,10 +95,11 @@
                 <label for="signup-department">Department</label>
                 <select id="signup-department" required>
                     <option value="" disabled selected>Select department</option>
-                    <option value="cse">Computer Science & Engineering (CSE)</option>
-                    <option value="ece">Electronics & Communication (ECE)</option>
-                    <option value="mech">Mechanical Engineering</option>
-                    <option value="civil">Civil Engineering</option>
+                    <option value="Computer Science & Engineering">Computer Science & Engineering (CSE)</option>
+                    <option value="Electronics & Communication">Electronics & Communication (ECE)</option>
+                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    <option value="Civil Engineering">Civil Engineering</option>
+                    <option value="Humanities and Social Science">Humanities and Social Science</option>
                 </select>
             </div>
             
@@ -120,12 +121,18 @@
                 <i class="fas fa-code-branch"></i>
                 <label for="signup-branch">Branch</label>
                 <select id="signup-branch" required>
-                    <option value="" disabled selected>Select branch</option>
-                    <option value="cse">CSE</option>
-                    <option value="ece">ECE</option>
-                    <option value="mech">Mechanical</option>
-                    <option value="civil">Civil</option>
+                    <option value=""" disabled selected>Select branch</option>
+                    <option value="CSE">CSE</option>
+                    <option value="ECE">ECE</option>
+                    <option value="MECH">Mechanical</option>
+                    <option value="CIVIL">Civil</option>
                 </select>
+            </div>
+            
+            <div class="input-group" id="staff-position-group" style="display: none;">
+                <i class="fas fa-briefcase"></i>
+                <label for="signup-field">Position</label>
+                <input type="text" id="signup-field" placeholder="Enter your position (e.g., Clerk, Librarian)">
             </div>
 
             <button type="submit" id="signup-btn">
@@ -138,6 +145,55 @@
         </form>
     </div>
     <script src="script.js"></script>
+    <script>
+        // Logic to control department, branch, batch, and field (position) based on user type
+        document.getElementById('signup-userType').addEventListener('change', function() {
+            const userType = this.value;
+            const departmentSelect = document.getElementById('signup-department');
+            const branchSelect = document.getElementById('signup-branch');
+            const batchSelect = document.getElementById('signup-batch');
+            const positionGroup = document.getElementById('staff-position-group');
+            const positionInput = document.getElementById('signup-field');
 
+            // Reset to default state
+            departmentSelect.disabled = false;
+            branchSelect.disabled = false;
+            batchSelect.disabled = false;
+            departmentSelect.required = true;
+            branchSelect.required = true;
+            batchSelect.required = true;
+            positionGroup.style.display = 'none';
+            positionInput.required = false;
+            positionInput.value = '';
+
+            if (userType === 'student') {
+                // Students cannot choose department, but can choose branch and batch
+                departmentSelect.disabled = true;
+                departmentSelect.required = false;
+                departmentSelect.value = '';
+            } else if (userType === 'faculty' || userType === 'admin') {
+                // Faculty and Admin can choose department, but not branch or batch
+                branchSelect.disabled = true;
+                batchSelect.disabled = true;
+                branchSelect.required = false;
+                batchSelect.required = false;
+                branchSelect.value = '';
+                batchSelect.value = '';
+            } else if (userType === 'staff') {
+                // Staff cannot choose department, branch, or batch, but can fill field (position)
+                departmentSelect.disabled = true;
+                branchSelect.disabled = true;
+                batchSelect.disabled = true;
+                departmentSelect.required = false;
+                branchSelect.required = false;
+                batchSelect.required = false;
+                departmentSelect.value = '';
+                branchSelect.value = '';
+                batchSelect.value = '';
+                positionGroup.style.display = 'block';
+                positionInput.required = true;
+            }
+        });
+    </script>
 </body>
 </html>
