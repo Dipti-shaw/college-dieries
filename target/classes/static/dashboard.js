@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('user-type').textContent = userData.userType || 'Not provided';
         document.getElementById('user-name').textContent = userData.userName || 'Not provided';
         document.getElementById('user-phone').textContent = userData.phone || 'Not provided';
-        document.getElementById('user-email').textContent = userData.emailId || 'Not provided';
+        document.getElementById('user-email').textContent = userData.email || 'Not provided';
         document.getElementById('user-department').textContent = userData.department || 'Not provided';
         document.getElementById('user-batch').textContent = userData.batch || 'Not provided';
         document.getElementById('user-branch').textContent = userData.branch || 'Not provided';
