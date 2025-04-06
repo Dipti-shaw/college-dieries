@@ -1,7 +1,10 @@
 com/example/BazaarAction.class
 com/example/StoryAction.class
+com/example/Gymkhana.class
 com/example/BazaarDAO.class
 com/example/Story.class
+com/example/GymkhanaDAO.class
+com/example/AnnouncementDAO.class
 com/example/StoryWithUser.class
 com/example/UserDAO.class
 com/example/DatabaseConnection.class
@@ -10,3 +13,5 @@ com/example/UserController.class
 com/example/Application.class
 com/example/Bazaar.class
 com/example/StoryDAO.class
+com/example/GymkhanaAction.class
+com/example/Announcement.class

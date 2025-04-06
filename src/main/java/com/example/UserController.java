@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
     private final UserDAO userDAO = new UserDAO();
     private final StoryDAO storyDAO = new StoryDAO();
     private final BazaarDAO bazaarDAO = new BazaarDAO();
@@ -116,26 +117,138 @@ public class UserController {
             return ResponseEntity.badRequest().body("Failed to provide item: " + e.getMessage());
         }
     }
+
+// Updated announcements endpoints
+    @PostMapping("/announcements")
+    public ResponseEntity<String> addAnnouncement(@RequestBody Announcement announcement) {
+        try {
+            // Assuming gymkhanaName is derived from userData (e.g., gymkhanaPos)
+            // You’ll need to adjust this based on how you populate gymkhanaName
+            if (announcement.getGymkhanaName() == null) {
+                return ResponseEntity.badRequest().body("Gymkhana name is required");
+            }
+            AnnouncementDAO.addAnnouncement(announcement); // Fixed instance method call
+            return ResponseEntity.ok("Announcement added successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Failed to add announcement: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/announcements")
+    public ResponseEntity<List<Announcement>> getAllAnnouncements() {
+        try {
+            List<Announcement> announcements = AnnouncementDAO.getAllAnnouncements(); // Fixed instance method call
+            return ResponseEntity.ok(announcements);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    // Gymkhana endpoints
+    @GetMapping("/gymkhanas")
+    public ResponseEntity<List<Gymkhana>> getAllGymkhanas() {
+        try {
+            List<Gymkhana> gymkhanas = GymkhanaDAO.getAllGymkhanas();
+            return ResponseEntity.ok(gymkhanas);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PostMapping("/gymkhana/assign-faculty")
+    public ResponseEntity<String> assignFaculty(@RequestBody GymkhanaAction action) {
+        try {
+            GymkhanaDAO.assignFaculty(action.getGymkhanaName(), action.getUserId());
+            return ResponseEntity.ok("Faculty assigned successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to assign faculty: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/gymkhana/set-budget")
+    public ResponseEntity<String> setBudget(@RequestBody GymkhanaAction action) {
+        try {
+            GymkhanaDAO.setBudget(action.getGymkhanaName(), action.getFunds());
+            return ResponseEntity.ok("Budget set successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to set budget: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/gymkhana/assign-pres")
+    public ResponseEntity<String> assignPresident(@RequestBody GymkhanaAction action) {
+        try {
+            GymkhanaDAO.assignPresident(action.getGymkhanaName(), action.getUserId());
+            return ResponseEntity.ok("President assigned successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to assign president: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/gymkhana/assign-vice-pres")
+    public ResponseEntity<String> assignVicePresident(@RequestBody GymkhanaAction action) {
+        try {
+            GymkhanaDAO.assignVicePresident(action.getGymkhanaName(), action.getUserId());
+            return ResponseEntity.ok("Vice-president assigned successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to assign vice-president: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/gymkhana/join")
+    public ResponseEntity<String> joinGymkhana(@RequestBody GymkhanaAction action) {
+        try {
+            GymkhanaDAO.joinGymkhana(action.getGymkhanaName(), action.getUserId());
+            return ResponseEntity.ok("Joined gymkhana successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to join gymkhana: " + e.getMessage());
+        }
+    }
 }
 
 // Class to handle like/dislike requests
 class StoryAction {
+
     private int userId;
     private String userType;
     private String timestamp;
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
-    public String getUserType() { return userType; }
-    public void setUserType(String userType) { this.userType = userType; }
-    public String getTimestamp() { return timestamp; }
-    public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
 }
 
 // Class to handle bazaar actions
 class BazaarAction {
+
     private int itemId;
 
-    public int getItemId() { return itemId; }
-    public void setItemId(int itemId) { this.itemId = itemId; }
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
 }

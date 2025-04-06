@@ -153,10 +153,34 @@
 
             <div id="announcements" class="section">
                 <h3>Announcements</h3>
+                <div class="announcement-container" style="margin-top: 20px;">
+                    <div class="card" style="padding: 20px; background: #f9f9f9; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); display: none;" id="add-announcement-form-container">
+                        <h4>Add New Announcement</h4>
+                        <form id="add-announcement-form">
+                            <div class="input-group">
+                                <label for="announcement-title" style="font-weight: bold; margin-bottom: 5px; display: block;">Title</label>
+                                <input type="text" id="announcement-title" placeholder="Enter announcement title" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                            </div>
+                            <div class="input-group">
+                                <label for="announcement-content" style="font-weight: bold; margin-bottom: 5px; display: block;">Content</label>
+                                <textarea id="announcement-content" placeholder="Enter announcement content" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+                            </div>
+                            <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Announce</button>
+                        </form>
+                    </div>
+                    <div id="announcements-list" style="margin-top: 20px;">
+                        <!-- Announcements will be dynamically added here -->
+                    </div>
+                </div>
             </div>
 
             <div id="clubs" class="section">
                 <h3>Gymkhana</h3>
+                <div class="gymkhana-container" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                    <div id="gymkhana-list">
+                        <!-- Gymkhana details will be dynamically added here -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
