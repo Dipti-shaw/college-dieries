@@ -43,10 +43,15 @@ public class GymkhanaDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, facultyId);
             stmt.setString(2, gymkhanaName);
-            stmt.executeUpdate();
-            System.out.println("Faculty assigned to gymkhana");
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                System.out.println("No rows updated - Check if Gymkhana_name exists or facultyId is valid.");
+            } else {
+                System.out.println("Faculty assigned to gymkhana");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQL Error: " + e.getMessage()); // Log the exact error
             throw new RuntimeException("Failed to assign faculty: " + e.getMessage());
         }
     }

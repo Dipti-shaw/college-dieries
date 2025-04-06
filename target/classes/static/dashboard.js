@@ -349,6 +349,8 @@ toggleAnnouncementForm();
 // ... (rest of the Bazaar functionality remains unchanged)
 
 
+// ... (previous code up to MAKE NO CHANGES ABOVE THIS COMMENT) ...
+
 // Gymkhana functionality
 function loadGymkhanas() {
     fetch('http://localhost:8080/api/users/gymkhanas', { method: 'GET' })
@@ -402,39 +404,63 @@ function loadGymkhanas() {
 }
 
 function openAssignFacultyForm(gymkhanaName) {
-    const userId = prompt('Enter Faculty User ID:');
-    if (userId) {
-        const data = { gymkhanaName, facultyId: parseInt(userId) };
-        fetch('http://localhost:8080/api/users/gymkhana/assign-faculty', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.text())
-        .then(data => { console.log('Assign faculty response:', data); loadGymkhanas(); })
-        .catch(error => console.error('Error assigning faculty:', error));
+    document.getElementById('assign-faculty-form').style.display = 'block';
+    document.getElementById('assign-faculty-gymkhana').value = gymkhanaName;
+}
+
+function closeForm(formId) {
+    document.getElementById(formId).style.display = 'none';
+    document.getElementById('faculty-id').value = '';
+    document.getElementById('budget-amount').value = '';
+}
+
+function submitAssignFacultyForm(e) {
+    e.preventDefault();
+    const gymkhanaName = document.getElementById('assign-faculty-gymkhana').value;
+    const facultyId = parseInt(document.getElementById('faculty-id').value);
+    if (isNaN(facultyId)) {
+        alert('Please enter a valid faculty ID.');
+        return;
     }
+    const data = { gymkhanaName, userId: facultyId };
+    fetch('http://localhost:8080/api/users/gymkhana/assign-faculty', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.text())
+    .then(data => { console.log('Assign faculty response:', data); loadGymkhanas(); closeForm('assign-faculty-form'); })
+    .catch(error => console.error('Error assigning faculty:', error));
 }
 
 function openSetBudgetForm(gymkhanaName) {
-    const funds = prompt('Enter new budget amount (₹):');
-    if (funds) {
-        const data = { gymkhanaName, funds: parseInt(funds) };
-        fetch('http://localhost:8080/api/users/gymkhana/set-budget', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.text())
-        .then(data => { console.log('Set budget response:', data); loadGymkhanas(); })
-        .catch(error => console.error('Error setting budget:', error));
+    document.getElementById('set-budget-form').style.display = 'block';
+    document.getElementById('set-budget-gymkhana').value = gymkhanaName;
+}
+
+function submitSetBudgetForm(e) {
+    e.preventDefault();
+    const gymkhanaName = document.getElementById('set-budget-gymkhana').value;
+    const funds = parseInt(document.getElementById('budget-amount').value);
+    if (isNaN(funds) || funds < 0) {
+        alert('Please enter a valid budget amount (non-negative).');
+        return;
     }
+    const data = { gymkhanaName, funds: funds };
+    fetch('http://localhost:8080/api/users/gymkhana/set-budget', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.text())
+    .then(data => { console.log('Set budget response:', data); loadGymkhanas(); closeForm('set-budget-form'); })
+    .catch(error => console.error('Error setting budget:', error));
 }
 
 function openAssignPresForm(gymkhanaName) {
-    const userId = prompt('Enter President User ID:');
+    const userId = prompt('Enter President User ID:'); // Keep prompt for now, can replace with form later
     if (userId) {
-        const data = { gymkhanaName, presId: parseInt(userId) };
+        const data = { gymkhanaName, userId: parseInt(userId) };
         fetch('http://localhost:8080/api/users/gymkhana/assign-pres', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -447,9 +473,9 @@ function openAssignPresForm(gymkhanaName) {
 }
 
 function openAssignVicePresForm(gymkhanaName) {
-    const userId = prompt('Enter Vice-President User ID:');
+    const userId = prompt('Enter Vice-President User ID:'); // Keep prompt for now, can replace with form later
     if (userId) {
-        const data = { gymkhanaName, vicePresId: parseInt(userId) };
+        const data = { gymkhanaName, userId: parseInt(userId) };
         fetch('http://localhost:8080/api/users/gymkhana/assign-vice-pres', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -477,9 +503,15 @@ function handleJoinGymkhana(gymkhanaName) {
     .catch(error => console.error('Error joining gymkhana:', error));
 }
 
+// Add form submission event listeners
+document.getElementById('assign-faculty-form-submit').addEventListener('submit', submitAssignFacultyForm);
+document.getElementById('set-budget-form-submit').addEventListener('submit', submitSetBudgetForm);
+
 // Load gymkhanas on page load and section change
 document.getElementById('nav-clubs').addEventListener('click', function() {
     loadGymkhanas();
 });
 loadGymkhanas();
+
+// ... (rest of the file remains unchanged)
 
