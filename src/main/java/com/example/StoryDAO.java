@@ -29,8 +29,7 @@ public class StoryDAO {
 
     public List<StoryWithUser> getAllStoriesWithUser() {
         List<StoryWithUser> stories = new ArrayList<>();
-        String query = "SELECT u.User_name, s.Posts, s.Like_count, s.Dislike_count, s.User_id, s.User_type, s.Timestamp " +
-                      "FROM Story_Section s JOIN User u ON s.User_id = u.User_id AND s.User_type = u.User_type";
+        String query = "SELECT u.User_name, s.Posts, s.Like_count, s.Dislike_count, s.User_id, s.User_type, s.Timestamp FROM Story_Section s JOIN User u ON s.User_id = u.User_id AND s.User_type = u.User_type ORDER BY s.Timestamp DESC";
         try (Connection conn = DatabaseConnection.getConnection(); 
              PreparedStatement stmt = conn.prepareStatement(query); 
              ResultSet rs = stmt.executeQuery()) {

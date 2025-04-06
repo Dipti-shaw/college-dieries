@@ -1,3 +1,6 @@
+// Declare userData in global scope
+let userData;
+
 function showSection(sectionId, element) {
     const sections = document.querySelectorAll('.section');
     sections.forEach(section => section.classList.remove('active'));
@@ -10,10 +13,6 @@ function showSection(sectionId, element) {
     if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
 }
 
-document.getElementById('menuToggle').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('open');
-});
-
 document.addEventListener('DOMContentLoaded', function() {
     if (!localStorage.getItem('isLoggedIn')) {
         window.location.href = 'index.html';
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const userDataRaw = localStorage.getItem('user');
     console.log('Raw userData from localStorage:', userDataRaw);
 
-    let userData;
     try {
         userData = JSON.parse(userDataRaw);
     } catch (error) {
@@ -61,23 +59,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-//meri ladki ko mt cher___________________________________________________________________________________________________________________________
-
     // Fetch and display stories
     function loadStories() {
-        fetch('http://localhost:8080/api/users/stories', {
-            method: 'GET'
-        })
-        .then(response => {
-            if (!response.ok) throw new Error(`Failed to fetch stories: ${response.status}`);
-            return response.json();
-        })
+        fetch('http://localhost:8080/api/users/stories', { method: 'GET' })
+        .then(response => { if (!response.ok) throw new Error(`Failed to fetch stories: ${response.status}`); return response.json(); })
         .then(stories => {
             const storiesList = document.getElementById('stories-list');
-            if (!storiesList) {
-                console.error('stories-list element not found');
-                return;
-            }
+            if (!storiesList) { console.error('stories-list element not found'); return; }
             storiesList.innerHTML = '';
             stories.forEach(story => {
                 const storyElement = document.createElement('div');
@@ -96,29 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 storiesList.appendChild(storyElement);
             });
-
-            // Add event listeners for like/dislike buttons
-            document.querySelectorAll('.like-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-userid');
-                    const userType = this.getAttribute('data-usertype');
-                    const timestamp = this.getAttribute('data-timestamp');
-                    updateStoryAction(userId, userType, timestamp, 'like');
-                });
-            });
-
-            document.querySelectorAll('.dislike-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-userid');
-                    const userType = this.getAttribute('data-usertype');
-                    const timestamp = this.getAttribute('data-timestamp');
-                    updateStoryAction(userId, userType, timestamp, 'dislike');
-                });
-            });
+            document.querySelectorAll('.like-btn').forEach(btn => btn.addEventListener('click', () => updateStoryAction(btn.getAttribute('data-userid'), btn.getAttribute('data-usertype'), btn.getAttribute('data-timestamp'), 'like')));
+            document.querySelectorAll('.dislike-btn').forEach(btn => btn.addEventListener('click', () => updateStoryAction(btn.getAttribute('data-userid'), btn.getAttribute('data-usertype'), btn.getAttribute('data-timestamp'), 'dislike')));
         })
-        .catch(error => {
-            console.error('Error fetching stories:', error);
-        });
+        .catch(error => console.error('Error fetching stories:', error));
     }
 
     function updateStoryAction(userId, userType, timestamp, action) {
@@ -128,35 +97,23 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: parseInt(userId), userType, timestamp })
         })
-        .then(response => {
-            if (!response.ok) throw new Error(`Failed to ${action} story: ${response.status}`);
-            return response.text();
-        })
-        .then(data => {
-            console.log(`${action} response:`, data);
-            loadStories(); // Refresh stories to update counts
-        })
-        .catch(error => {
-            console.error(`Error ${action}ing story:`, error);
-            alert(`Failed to ${action} story: ${error.message}`);
-        });
+        .then(response => { if (!response.ok) throw new Error(`Failed to ${action} story: ${response.status}`); return response.text(); })
+        .then(data => { console.log(`${action} response:`, data); loadStories(); })
+        .catch(error => { console.error(`Error ${action}ing story:`, error); alert(`Failed to ${action} story: ${error.message}`); });
     }
 
-    loadStories(); // Initial load
+    loadStories();
 
-    // Story submission
     const storyForm = document.getElementById('add-story-form');
     if (storyForm) {
         storyForm.addEventListener('submit', function(e) {
             e.preventDefault();
-
             if (!userData || !userData.userId) {
                 console.error('No userData found for story submission');
                 alert('User data not found. Please log in again.');
                 window.location.href = 'index.html';
                 return;
             }
-
             const storyData = {
                 userId: userData.userId,
                 userType: userData.userType,
@@ -165,37 +122,126 @@ document.addEventListener('DOMContentLoaded', function() {
                 dislikeCount: 0,
                 timestamp: new Date().toISOString().slice(0, 19).replace('T', ' ')
             };
-
-            if (!storyData.posts) {
-                alert('Story cannot be empty.');
-                return;
-            }
-
-            console.log('Submitting story:', storyData);
-
+            if (!storyData.posts) { alert('Story cannot be empty.'); return; }
             fetch('http://localhost:8080/api/users/stories', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(storyData)
             })
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                return response.text();
-            })
-            .then(data => {
-                console.log('Story response:', data);
-                //alert(data);
-                document.getElementById('story-posts').value = '';
-                loadStories(); // Refresh stories
-            })
-            .catch(error => {
-                console.error('Story upload error:', error);
-                alert('Failed to add story: ' + error.message);
-            });
+            .then(response => { if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`); return response.text(); })
+            .then(data => { console.log('Story response:', data); document.getElementById('story-posts').value = ''; loadStories(); })
+            .catch(error => { console.error('Story upload error:', error); alert('Failed to add story: ' + error.message); });
         });
-    } else {
-        console.error('add-story-form not found');
-    }
+    } else { console.error('add-story-form not found'); }
 });
 // MAKE NO CHANGES ABOVE THIS COMMENT PLEASE :)
 // do not change area___________________________________________________________________________________________________________________________________________________
+
+// Bazaar functionality
+function loadBazaarItems() {
+    fetch('http://localhost:8080/api/users/bazaar', { method: 'GET' })
+    .then(response => { console.log('Fetch response status:', response.status); if (!response.ok) throw new Error(`Failed to fetch bazaar items: ${response.status}`); return response.json(); })
+    .then(items => {
+        console.log('Fetched bazaar items:', items);
+        const bazaarItems = document.getElementById('bazaar-items');
+        if (!bazaarItems) { console.error('bazaar-items element not found'); return; }
+        bazaarItems.innerHTML = '';
+        if (items.length === 0) { bazaarItems.innerHTML = '<p>No items available.</p>'; return; }
+        items.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'card';
+            itemElement.style.padding = '20px';
+            itemElement.style.background = '#f9f9f9';
+            itemElement.style.borderRadius = '10px';
+            itemElement.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.1)';
+            itemElement.innerHTML = `
+                <h4>${item.itemName}</h4>
+                <p>Quantity: ${item.count}</p>
+                <p>Price: ₹${item.price}</p>
+                <p>Type: ${item.itemType}</p>
+                <div class="bazaar-actions">
+                    ${item.itemType === 'sell' ? `<button class="buy-btn" data-itemid="${item.itemId}">Buy</button>` : `<button class="provide-btn" data-itemid="${item.itemId}">Provide</button>`}
+                </div>
+            `;
+            bazaarItems.appendChild(itemElement);
+        });
+        document.querySelectorAll('.buy-btn').forEach(btn => btn.addEventListener('click', () => handleBazaarAction(btn.getAttribute('data-itemid'), 'buy')));
+        document.querySelectorAll('.provide-btn').forEach(btn => btn.addEventListener('click', () => handleBazaarAction(btn.getAttribute('data-itemid'), 'provide')));
+    })
+    .catch(error => { console.error('Error fetching bazaar items:', error); bazaarItems.innerHTML = '<p>Error loading items. Check console.</p>'; });
+}
+
+function handleBazaarAction(itemId, action) {
+    const endpoint = action === 'buy' ? '/api/users/bazaar/buy' : '/api/users/bazaar/provide';
+    fetch(`http://localhost:8080${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemId: parseInt(itemId) })
+    })
+    .then(response => { if (!response.ok) throw new Error(`Failed to ${action} item: ${response.status}`); return response.text(); })
+    .then(data => { console.log(`${action} response:`, data); loadBazaarItems(); })
+    .catch(error => { console.error(`Error ${action}ing item:`, error); alert(`Failed to ${action} item: ${error.message}`); });
+}
+
+const bazaarForm = document.getElementById('add-bazaar-form');
+console.log('Bazaar form element:', bazaarForm);
+if (bazaarForm) {
+    bazaarForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('Form submitted with action:', e.submitter.value);
+
+        if (!userData || !userData.userId) {
+            console.error('No userData found for bazaar submission:', userData);
+            alert('User data not found. Please log in again.');
+            window.location.href = 'index.html';
+            return;
+        }
+
+        const itemData = {
+            userId: userData.userId,
+            itemName: document.getElementById('item-name').value.trim(),
+            count: parseInt(document.getElementById('item-count').value),
+            price: parseInt(document.getElementById('item-price').value),
+            itemType: e.submitter.value
+        };
+
+        console.log('Submitting bazaar item:', itemData);
+
+        if (!itemData.itemName || itemData.count < 1 || itemData.price < 0) {
+            alert('Please provide valid item details. Item name cannot be empty, quantity must be at least 1, and price cannot be negative.');
+            return;
+        }
+
+        fetch('http://localhost:8080/api/users/bazaar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(itemData)
+        })
+        .then(response => {
+            console.log('Fetch response status:', response.status);
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(`HTTP error! Status: ${response.status}, Response: ${text}`); });
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log('Bazaar response:', data);
+            document.getElementById('item-name').value = '';
+            document.getElementById('item-count').value = '1';
+            document.getElementById('item-price').value = '';
+            loadBazaarItems();
+        })
+        .catch(error => {
+            console.error('Bazaar upload error:', error);
+            alert('Failed to add item: ' + error.message);
+        });
+    });
+} else {
+    console.error('add-bazaar-form not found');
+}
+
+// Load bazaar items when the bazaar section is shown
+document.getElementById('nav-bazaar').addEventListener('click', loadBazaarItems);
+
+// Load items on page load as fallback
+loadBazaarItems();

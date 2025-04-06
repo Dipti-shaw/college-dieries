@@ -1,4 +1,6 @@
+com/example/BazaarAction.class
 com/example/StoryAction.class
+com/example/BazaarDAO.class
 com/example/Story.class
 com/example/StoryWithUser.class
 com/example/UserDAO.class
@@ -6,4 +8,5 @@ com/example/DatabaseConnection.class
 com/example/User.class
 com/example/UserController.class
 com/example/Application.class
+com/example/Bazaar.class
 com/example/StoryDAO.class

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserDAO userDAO = new UserDAO();
     private final StoryDAO storyDAO = new StoryDAO();
+    private final BazaarDAO bazaarDAO = new BazaarDAO();
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody User user) {
@@ -45,7 +46,6 @@ public class UserController {
         }
     }
 
-    // New endpoint to fetch all stories with usernames
     @GetMapping("/stories")
     public ResponseEntity<List<StoryWithUser>> getAllStories() {
         try {
@@ -75,6 +75,47 @@ public class UserController {
             return ResponseEntity.badRequest().body("Failed to dislike story: " + e.getMessage());
         }
     }
+
+    // Bazaar endpoints
+    @PostMapping("/bazaar")
+    public ResponseEntity<String> addBazaarItem(@RequestBody Bazaar item) {
+        try {
+            bazaarDAO.addItem(item);
+            return ResponseEntity.ok("Item added to bazaar successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to add item: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/bazaar")
+    public ResponseEntity<List<Bazaar>> getAllBazaarItems() {
+        try {
+            List<Bazaar> items = bazaarDAO.getAllItems();
+            return ResponseEntity.ok(items);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PostMapping("/bazaar/buy")
+    public ResponseEntity<String> buyItem(@RequestBody BazaarAction action) {
+        try {
+            bazaarDAO.buyItem(action.getItemId());
+            return ResponseEntity.ok("Item purchased successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to buy item: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/bazaar/provide")
+    public ResponseEntity<String> provideItem(@RequestBody BazaarAction action) {
+        try {
+            bazaarDAO.fulfillRequest(action.getItemId());
+            return ResponseEntity.ok("Request fulfilled successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to provide item: " + e.getMessage());
+        }
+    }
 }
 
 // Class to handle like/dislike requests
@@ -83,11 +124,18 @@ class StoryAction {
     private String userType;
     private String timestamp;
 
-    // Getters and setters
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
     public String getUserType() { return userType; }
     public void setUserType(String userType) { this.userType = userType; }
     public String getTimestamp() { return timestamp; }
     public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
+}
+
+// Class to handle bazaar actions
+class BazaarAction {
+    private int itemId;
+
+    public int getItemId() { return itemId; }
+    public void setItemId(int itemId) { this.itemId = itemId; }
 }
