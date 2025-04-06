@@ -240,7 +240,6 @@ if (bazaarForm) {
     console.error('add-bazaar-form not found');
 }
 
-// Load bazaar items when the bazaar section is shown
 document.getElementById('nav-bazaar').addEventListener('click', loadBazaarItems);
 
 // Load items on page load as fallback
@@ -248,8 +247,6 @@ loadBazaarItems();
 
 // MAKE NO CHANGES ABOVE THIS COMMENT PLEASE :)
 // do not change area___________________________________________________________________________________________________________________________________________________
-
-// ... (previous code up to MAKE NO CHANGES ABOVE THIS COMMENT) ...
 
 // Announcements functionality
 function loadAnnouncements() {
@@ -268,14 +265,31 @@ function loadAnnouncements() {
             announcementElement.style.borderRadius = '10px';
             announcementElement.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.1)';
             announcementElement.innerHTML = `
-                <h4>${announcement.title || 'Untitled'}</h4> <!-- Fallback title if needed -->
+                <h4>${announcement.gymkhanaName || 'General'}</h4>
                 <p>${announcement.announcementMessage}</p>
-                <p><small>By: ${announcement.userName || 'Unknown'} on ${new Date(announcement.timestamp).toLocaleString()}</small></p>
+                <p><small>Posted on ${new Date(announcement.timestamp).toLocaleString()}</small></p>
             `;
             announcementsList.appendChild(announcementElement);
         });
     })
     .catch(error => { console.error('Error fetching announcements:', error); announcementsList.innerHTML = '<p>Error loading announcements. Check console.</p>'; });
+}
+
+function loadGymkhanaNames() {
+    fetch('http://localhost:8080/api/users/gymkhana-names', { method: 'GET' })
+    .then(response => { if (!response.ok) throw new Error(`Failed to fetch gymkhana names: ${response.status}`); return response.json(); })
+    .then(gymkhanaNames => {
+        const select = document.getElementById('announcement-gymkhana');
+        if (select) {
+            gymkhanaNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                select.appendChild(option);
+            });
+        }
+    })
+    .catch(error => console.error('Error fetching gymkhana names:', error));
 }
 
 function handleAnnouncementSubmission() {
@@ -285,15 +299,19 @@ function handleAnnouncementSubmission() {
         window.location.href = 'index.html';
         return;
     }
+    if (userData.userType !== 'student' || !userData.announcementsPos) {
+        alert('Only students with a gymkhana position can post announcements.');
+        return;
+    }
 
     const announcementData = {
-        gymkhanaName: userData.announcementsPos || 'DefaultGymkhana', // Adjust based on your logic
+        gymkhanaName: document.getElementById('announcement-gymkhana').value,
         announcementMessage: document.getElementById('announcement-content').value.trim(),
         timestamp: new Date().toISOString().slice(0, 19).replace('T', ' ')
     };
 
-    if (!announcementData.announcementMessage) {
-        alert('Please provide announcement content.');
+    if (!announcementData.announcementMessage || !announcementData.gymkhanaName) {
+        alert('Please select a gymkhana and provide announcement content.');
         return;
     }
 
@@ -311,8 +329,8 @@ function handleAnnouncementSubmission() {
     })
     .then(data => {
         console.log('Announcement response:', data);
-        document.getElementById('announcement-title').value = '';
         document.getElementById('announcement-content').value = '';
+        document.getElementById('announcement-gymkhana').value = '';
         loadAnnouncements();
         document.getElementById('add-announcement-form-container').style.display = 'none';
     })
@@ -324,8 +342,12 @@ function handleAnnouncementSubmission() {
 
 function toggleAnnouncementForm() {
     const formContainer = document.getElementById('add-announcement-form-container');
-    const shouldShow = userData && (userData.userType === 'faculty' || userData.userType === 'admin' || userData.announcementsPos !== null);
+    const shouldShow = userData && userData.userType === 'student' && userData.announcementsPos;
     formContainer.style.display = shouldShow ? 'block' : 'none';
+    if (shouldShow && !formContainer.dataset.loaded) {
+        loadGymkhanaNames();
+        formContainer.dataset.loaded = 'true';
+    }
 }
 
 const announcementForm = document.getElementById('add-announcement-form');
@@ -346,10 +368,6 @@ document.getElementById('nav-announcements').addEventListener('click', function(
 loadAnnouncements();
 toggleAnnouncementForm();
 
-// ... (rest of the Bazaar functionality remains unchanged)
-
-
-// ... (previous code up to MAKE NO CHANGES ABOVE THIS COMMENT) ...
 
 // Gymkhana functionality
 function loadGymkhanas() {

@@ -2,7 +2,7 @@ package com.example;
 
 public class Announcement {
     private int announcementId;
-    private String gymkhanaName; // Foreign key, you’ll manage the Gymkhana table
+    private String gymkhanaName;
     private String announcementMessage;
     private String timestamp;
 

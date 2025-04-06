@@ -118,16 +118,13 @@ public class UserController {
         }
     }
 
-// Updated announcements endpoints
     @PostMapping("/announcements")
     public ResponseEntity<String> addAnnouncement(@RequestBody Announcement announcement) {
         try {
-            // Assuming gymkhanaName is derived from userData (e.g., gymkhanaPos)
-            // You’ll need to adjust this based on how you populate gymkhanaName
-            if (announcement.getGymkhanaName() == null) {
-                return ResponseEntity.badRequest().body("Gymkhana name is required");
+            if (announcement.getGymkhanaName() == null || announcement.getAnnouncementMessage() == null || announcement.getAnnouncementMessage().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Gymkhana name and announcement message are required");
             }
-            AnnouncementDAO.addAnnouncement(announcement); // Fixed instance method call
+            AnnouncementDAO.addAnnouncement(announcement);
             return ResponseEntity.ok("Announcement added successfully");
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,7 +135,7 @@ public class UserController {
     @GetMapping("/announcements")
     public ResponseEntity<List<Announcement>> getAllAnnouncements() {
         try {
-            List<Announcement> announcements = AnnouncementDAO.getAllAnnouncements(); // Fixed instance method call
+            List<Announcement> announcements = AnnouncementDAO.getAllAnnouncements();
             return ResponseEntity.ok(announcements);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);

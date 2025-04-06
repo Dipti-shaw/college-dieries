@@ -154,12 +154,14 @@
             <div id="announcements" class="section">
                 <h3>Announcements</h3>
                 <div class="announcement-container" style="margin-top: 20px;">
-                    <div class="card" style="padding: 20px; background: #f9f9f9; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); display: none;" id="add-announcement-form-container">
+                    <div class="card" id="add-announcement-form-container" style="padding: 20px; background: #f9f9f9; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); display: none;">
                         <h4>Add New Announcement</h4>
                         <form id="add-announcement-form">
                             <div class="input-group">
-                                <label for="announcement-title" style="font-weight: bold; margin-bottom: 5px; display: block;">Title</label>
-                                <input type="text" id="announcement-title" placeholder="Enter announcement title" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                <label for="announcement-gymkhana" style="font-weight: bold; margin-bottom: 5px; display: block;">Select Gymkhana</label>
+                                <select id="announcement-gymkhana" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                                    <option value="">Select a Gymkhana</option>
+                                </select>
                             </div>
                             <div class="input-group">
                                 <label for="announcement-content" style="font-weight: bold; margin-bottom: 5px; display: block;">Content</label>
