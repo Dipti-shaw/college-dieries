@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('user-batch').textContent = userData.batch || 'Not provided';
         document.getElementById('user-branch').textContent = userData.branch || 'Not provided';
         document.getElementById('user-field').textContent = userData.field || 'Not provided';
-        document.getElementById('user-gymkhana-pos').textContent = userData.announcementsPos || 'Not provided';
+        document.getElementById('user-gymkhana-pos').textContent = userData.gymkhanaPos || 'Not provided';
     }
 
     document.getElementById('logoutBtn').addEventListener('click', function() {
@@ -248,6 +248,8 @@ loadBazaarItems();
 // MAKE NO CHANGES ABOVE THIS COMMENT PLEASE :)
 // do not change area___________________________________________________________________________________________________________________________________________________
 
+// ... (previous code up to MAKE NO CHANGES ABOVE THIS COMMENT) ...
+
 // Announcements functionality
 function loadAnnouncements() {
     fetch('http://localhost:8080/api/users/announcements', { method: 'GET' })
@@ -276,18 +278,14 @@ function loadAnnouncements() {
 }
 
 function loadGymkhanaNames() {
+    // This function is no longer needed for the dropdown but can be kept for future use
     fetch('http://localhost:8080/api/users/gymkhana-names', { method: 'GET' })
-    .then(response => { if (!response.ok) throw new Error(`Failed to fetch gymkhana names: ${response.status}`); return response.json(); })
+    .then(response => {
+        if (!response.ok) throw new Error(`Failed to fetch gymkhana names: ${response.status}`);
+        return response.json();
+    })
     .then(gymkhanaNames => {
-        const select = document.getElementById('announcement-gymkhana');
-        if (select) {
-            gymkhanaNames.forEach(name => {
-                const option = document.createElement('option');
-                option.value = name;
-                option.textContent = name;
-                select.appendChild(option);
-            });
-        }
+        console.log('Gymkhana names fetched (for reference):', gymkhanaNames);
     })
     .catch(error => console.error('Error fetching gymkhana names:', error));
 }
@@ -299,21 +297,40 @@ function handleAnnouncementSubmission() {
         window.location.href = 'index.html';
         return;
     }
-    if (userData.userType !== 'student' || !userData.announcementsPos) {
-        alert('Only students with a gymkhana position can post announcements.');
+
+    let gymkhanaName = '';
+    let announcementMessage = document.getElementById('announcement-content').value.trim();
+
+    // Determine gymkhanaName based on user role
+    if (userData.userType === 'admin' || userData.userType === 'faculty') {
+        gymkhanaName = 'General';
+    } else if (userData.userType === 'student' && userData.gymkhanaPos) {
+        // Check if the user is a president or vice-president
+        if (userData.gymkhanaPos.endsWith('-President') || userData.gymkhanaPos.endsWith('-Vice-President')) {
+            gymkhanaName = document.getElementById('announcement-gymkhana')?.value.trim() || '';
+            if (!gymkhanaName) {
+                alert('Please enter a gymkhana name.');
+                return;
+            }
+        } else {
+            alert('Only presidents, vice-presidents, or admins/faculty can post announcements.');
+            return;
+        }
+    } else {
+        alert('You do not have permission to post announcements.');
+        return;
+    }
+
+    if (!announcementMessage) {
+        alert('Please provide announcement content.');
         return;
     }
 
     const announcementData = {
-        gymkhanaName: document.getElementById('announcement-gymkhana').value,
-        announcementMessage: document.getElementById('announcement-content').value.trim(),
+        gymkhanaName,
+        announcementMessage,
         timestamp: new Date().toISOString().slice(0, 19).replace('T', ' ')
     };
-
-    if (!announcementData.announcementMessage || !announcementData.gymkhanaName) {
-        alert('Please select a gymkhana and provide announcement content.');
-        return;
-    }
 
     fetch('http://localhost:8080/api/users/announcements', {
         method: 'POST',
@@ -330,7 +347,9 @@ function handleAnnouncementSubmission() {
     .then(data => {
         console.log('Announcement response:', data);
         document.getElementById('announcement-content').value = '';
-        document.getElementById('announcement-gymkhana').value = '';
+        if (document.getElementById('announcement-gymkhana')) {
+            document.getElementById('announcement-gymkhana').value = '';
+        }
         loadAnnouncements();
         document.getElementById('add-announcement-form-container').style.display = 'none';
     })
@@ -342,22 +361,53 @@ function handleAnnouncementSubmission() {
 
 function toggleAnnouncementForm() {
     const formContainer = document.getElementById('add-announcement-form-container');
-    const shouldShow = userData && userData.userType === 'student' && userData.announcementsPos;
-    formContainer.style.display = shouldShow ? 'block' : 'none';
-    if (shouldShow && !formContainer.dataset.loaded) {
-        loadGymkhanaNames();
-        formContainer.dataset.loaded = 'true';
-    }
-}
+    const announcementForm = document.getElementById('add-announcement-form');
+    const gymkhanaInput = document.getElementById('announcement-gymkhana');
 
-const announcementForm = document.getElementById('add-announcement-form');
-if (announcementForm) {
-    announcementForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        handleAnnouncementSubmission();
-    });
-} else {
-    console.error('add-announcement-form not found');
+    // Reset form container
+    formContainer.innerHTML = `
+        <h4>Add New Announcement</h4>
+        <form id="add-announcement-form">
+            <div class="input-group">
+                <label for="announcement-content" style="font-weight: bold; margin-bottom: 5px; display: block;">Content</label>
+                <textarea id="announcement-content" placeholder="Enter announcement content" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+            </div>
+            <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Announce</button>
+        </form>
+    `;
+    formContainer.style.display = 'none';
+
+    // Determine if user can post and configure form
+    if (!userData || !userData.userId) return;
+
+    let canPost = false;
+    if (userData.userType === 'admin' || userData.userType === 'faculty') {
+        canPost = true;
+    } else if (userData.userType === 'student' && userData.gymkhanaPos) {
+        if (userData.gymkhanaPos.endsWith('-President') || userData.gymkhanaPos.endsWith('-Vice-President')) {
+            canPost = true;
+            // Add input field for gymkhana name for presidents/vice-presidents
+            formContainer.innerHTML += `
+                <div class="input-group" style="margin-top: 10px;">
+                    <label for="announcement-gymkhana" style="font-weight: bold; margin-bottom: 5px; display: block;">Gymkhana Name</label>
+                    <input type="text" id="announcement-gymkhana" placeholder="Enter gymkhana name" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                </div>
+            `;
+        }
+    }
+
+    if (canPost) {
+        formContainer.style.display = 'block';
+        const newForm = document.getElementById('add-announcement-form');
+        if (newForm) {
+            newForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleAnnouncementSubmission();
+            });
+        } else {
+            console.error('add-announcement-form not found after recreation');
+        }
+    }
 }
 
 // Load announcements and toggle form visibility on page load and section change
@@ -368,6 +418,7 @@ document.getElementById('nav-announcements').addEventListener('click', function(
 loadAnnouncements();
 toggleAnnouncementForm();
 
+// ... (previous code up to MAKE NO CHANGES ABOVE THIS COMMENT) ...
 
 // Gymkhana functionality
 function loadGymkhanas() {
@@ -395,7 +446,7 @@ function loadGymkhanas() {
                 <p>${presName}</p>
                 <p>${vicePresName}</p>
                 <p>${facultyName}</p>
-                <div class="gymkhana-actions">
+                <div class="gymkhana-actions" id="actions-${gymkhana.gymkhanaName}">
                     ${userData && userData.userType === 'admin' ? `
                         <button class="assign-faculty-btn" data-gymkhananame="${gymkhana.gymkhanaName}">Assign Faculty</button>
                         <button class="set-budget-btn" data-gymkhananame="${gymkhana.gymkhanaName}">Set Budget</button>
@@ -412,8 +463,8 @@ function loadGymkhanas() {
             gymkhanaList.appendChild(gymkhanaElement);
         });
         // Add event listeners for actions
-        document.querySelectorAll('.assign-faculty-btn').forEach(btn => btn.addEventListener('click', () => openAssignFacultyForm(btn.getAttribute('data-gymkhananame'))));
-        document.querySelectorAll('.set-budget-btn').forEach(btn => btn.addEventListener('click', () => openSetBudgetForm(btn.getAttribute('data-gymkhananame'))));
+        document.querySelectorAll('.assign-faculty-btn').forEach(btn => btn.addEventListener('click', () => openAssignFacultyForm(btn.getAttribute('data-gymkhananame'), btn)));
+        document.querySelectorAll('.set-budget-btn').forEach(btn => btn.addEventListener('click', () => openSetBudgetForm(btn.getAttribute('data-gymkhananame'), btn)));
         document.querySelectorAll('.assign-pres-btn').forEach(btn => btn.addEventListener('click', () => openAssignPresForm(btn.getAttribute('data-gymkhananame'))));
         document.querySelectorAll('.assign-vice-pres-btn').forEach(btn => btn.addEventListener('click', () => openAssignVicePresForm(btn.getAttribute('data-gymkhananame'))));
         document.querySelectorAll('.join-gymkhana-btn').forEach(btn => btn.addEventListener('click', () => handleJoinGymkhana(btn.getAttribute('data-gymkhananame'))));
@@ -421,15 +472,30 @@ function loadGymkhanas() {
     .catch(error => { console.error('Error fetching gymkhanas:', error); gymkhanaList.innerHTML = '<p>Error loading gymkhanas. Check console.</p>'; });
 }
 
-function openAssignFacultyForm(gymkhanaName) {
-    document.getElementById('assign-faculty-form').style.display = 'block';
-    document.getElementById('assign-faculty-gymkhana').value = gymkhanaName;
+function openAssignFacultyForm(gymkhanaName, buttonElement) {
+    // Show the original faculty form positioned over the button
+    const facultyForm = document.getElementById('assign-faculty-form');
+    if (facultyForm) {
+        facultyForm.style.display = 'block';
+        document.getElementById('assign-faculty-gymkhana').value = gymkhanaName;
+        facultyForm.style.position = 'absolute';
+        facultyForm.style.top = (buttonElement.offsetTop + buttonElement.offsetHeight); // Position below the button
+        facultyForm.style.left = buttonElement.offsetLeft; // Align with the button's left edge
+        facultyForm.style.zIndex = '1000';
+    } else {
+        console.error('assign-faculty-form not found in DOM');
+    }
 }
 
 function closeForm(formId) {
-    document.getElementById(formId).style.display = 'none';
-    document.getElementById('faculty-id').value = '';
-    document.getElementById('budget-amount').value = '';
+    const form = document.getElementById(formId);
+    if (form) {
+        form.style.display = 'none';
+        document.getElementById('faculty-id').value = '';
+        document.getElementById('budget-amount').value = '';
+    }
+    const tempAnnouncement = document.getElementById('temp-announcement-form');
+    if (tempAnnouncement) tempAnnouncement.remove();
 }
 
 function submitAssignFacultyForm(e) {
@@ -451,9 +517,19 @@ function submitAssignFacultyForm(e) {
     .catch(error => console.error('Error assigning faculty:', error));
 }
 
-function openSetBudgetForm(gymkhanaName) {
-    document.getElementById('set-budget-form').style.display = 'block';
-    document.getElementById('set-budget-gymkhana').value = gymkhanaName;
+function openSetBudgetForm(gymkhanaName, buttonElement) {
+    // Show the original budget form positioned over the button
+    const budgetForm = document.getElementById('set-budget-form');
+    if (budgetForm) {
+        budgetForm.style.display = 'block';
+        document.getElementById('set-budget-gymkhana').value = gymkhanaName;
+        budgetForm.style.position = 'absolute';
+        budgetForm.style.top = (buttonElement.offsetTop + buttonElement.offsetHeight); // Position below the button
+        budgetForm.style.left = buttonElement.offsetLeft ; // Align with the button's left edge
+        budgetForm.style.zIndex = '1000';
+    } else {
+        console.error('set-budget-form not found in DOM');
+    }
 }
 
 function submitSetBudgetForm(e) {

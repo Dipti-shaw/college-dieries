@@ -183,29 +183,22 @@
                         <!-- Gymkhana details will be dynamically added here -->
                     </div>
                 </div>
-                <!-- In-page forms -->
-                <div id="assign-faculty-form" class="card" style="padding: 20px; background: #f9f9f9; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); display: none; margin-top: 20px;">
+                <div id="assign-faculty-form" style="display: none;">
                     <h4>Assign Faculty</h4>
                     <form id="assign-faculty-form-submit">
                         <input type="hidden" id="assign-faculty-gymkhana">
-                        <div class="input-group">
-                            <label for="faculty-id" style="font-weight: bold; margin-bottom: 5px; display: block;">Faculty User ID</label>
-                            <input type="number" id="faculty-id" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                        </div>
-                        <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Assign</button>
-                        <button type="button" onclick="closeForm('assign-faculty-form')" style="margin-top: 10px; padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Cancel</button>
+                        <label for="faculty-id">Faculty ID:</label>
+                        <input type="number" id="faculty-id" required>
+                        <button type="submit">Assign</button>
                     </form>
                 </div>
-                <div id="set-budget-form" class="card" style="padding: 20px; background: #f9f9f9; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); display: none; margin-top: 20px;">
+                <div id="set-budget-form" style="display: none;">
                     <h4>Set Budget</h4>
                     <form id="set-budget-form-submit">
                         <input type="hidden" id="set-budget-gymkhana">
-                        <div class="input-group">
-                            <label for="budget-amount" style="font-weight: bold; margin-bottom: 5px; display: block;">Budget Amount (₹)</label>
-                            <input type="number" id="budget-amount" min="0" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                        </div>
-                        <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Set</button>
-                        <button type="button" onclick="closeForm('set-budget-form')" style="margin-top: 10px; padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Cancel</button>
+                        <label for="budget-amount">Amount (₹):</label>
+                        <input type="number" id="budget-amount" required>
+                        <button type="submit">Set</button>
                     </form>
                 </div>
             </div>
