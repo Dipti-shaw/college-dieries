@@ -145,7 +145,7 @@ public class UserController {
         }
     }
 
-    // Gymkhana endpoints
+// Gymkhana endpoints
     @GetMapping("/gymkhanas")
     public ResponseEntity<List<Gymkhana>> getAllGymkhanas() {
         try {
