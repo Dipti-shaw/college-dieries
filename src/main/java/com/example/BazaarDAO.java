@@ -18,6 +18,7 @@ public class BazaarDAO {
             stmt.setInt(4, item.getPrice());
             stmt.setString(5, item.getItemType());
             stmt.executeUpdate();
+            System.out.println("querry executed : "+query);
             System.out.println("Item added to bazaar");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -27,10 +28,11 @@ public class BazaarDAO {
 
     public List<Bazaar> getAllItems() {
         List<Bazaar> items = new ArrayList<>();
-        String query = "SELECT * FROM Bazaar";
+        String query = "SELECT * FROM Bazaar ORDER BY Item_id DESC;";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
+            System.out.println("querry executed : "+query);
             while (rs.next()) {
                 items.add(new Bazaar(
                     rs.getInt("Item_id"),
@@ -53,6 +55,7 @@ public class BazaarDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, itemId);
             int rows = stmt.executeUpdate();
+            System.out.println("querry executed : "+query);
             if (rows == 0) throw new SQLException("No request found with Item_id: " + itemId);
             System.out.println("Request fulfilled and removed");
         } catch (SQLException e) {
@@ -67,6 +70,7 @@ public class BazaarDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, itemId);
             int rows = stmt.executeUpdate();
+            System.out.println("querry executed : "+query);
             if (rows == 0) throw new SQLException("No sell item found with Item_id: " + itemId);
             System.out.println("Item bought and removed");
         } catch (SQLException e) {

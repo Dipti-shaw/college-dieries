@@ -25,6 +25,7 @@ public class UserDAO {
             stmt.setString(10, user.getGymkhanaPos());
 
             stmt.executeUpdate();
+            System.err.println("querry executed : "+query);
             System.err.println("user added to database");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,6 +41,7 @@ public class UserDAO {
             stmt.setInt(1, userId);
             stmt.setString(2, userType);
             ResultSet rs = stmt.executeQuery();
+            System.err.println("querry executed : "+query);
 
             if (rs.next()) {
                 user = new User(rs.getInt("User_id"), rs.getString("User_type"), rs.getString("User_name"),

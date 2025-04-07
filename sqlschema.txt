@@ -1,0 +1,290 @@
+-- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
+--
+-- Host: localhost    Database: college_diaries
+-- ------------------------------------------------------
+-- Server version	8.0.41-0ubuntu0.24.10.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `Announcements`
+--
+
+DROP TABLE IF EXISTS `Announcements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Announcements` (
+  `Announcement_id` int NOT NULL AUTO_INCREMENT,
+  `Gymkhana_name` varchar(100) DEFAULT NULL,
+  `Announcement_message` text NOT NULL,
+  `Timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Announcement_id`),
+  KEY `Gymkhana_name` (`Gymkhana_name`),
+  CONSTRAINT `Announcements_ibfk_1` FOREIGN KEY (`Gymkhana_name`) REFERENCES `Gymkhana` (`Gymkhana_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Bazaar`
+--
+
+DROP TABLE IF EXISTS `Bazaar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Bazaar` (
+  `Item_id` int NOT NULL AUTO_INCREMENT,
+  `User_id` int NOT NULL,
+  `Item_name` varchar(100) NOT NULL,
+  `Count` int DEFAULT '1',
+  `Price` int NOT NULL,
+  `Item_type` enum('sell','request') NOT NULL DEFAULT 'sell',
+  PRIMARY KEY (`Item_id`),
+  KEY `Bazaar_ibfk_1` (`User_id`),
+  CONSTRAINT `Bazaar_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `User` (`User_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Gymkhana`
+--
+
+DROP TABLE IF EXISTS `Gymkhana`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Gymkhana` (
+  `Gymkhana_name` varchar(100) NOT NULL,
+  `Pres_id` int DEFAULT NULL,
+  `Faculty_id` int DEFAULT NULL,
+  `Vice_pres_id` int DEFAULT NULL,
+  `Member_count` int DEFAULT '0',
+  `Funds` int DEFAULT '0',
+  PRIMARY KEY (`Gymkhana_name`),
+  KEY `Gymkhana_ibfk_1` (`Pres_id`),
+  KEY `Gymkhana_ibfk_2` (`Faculty_id`),
+  KEY `Gymkhana_ibfk_3` (`Vice_pres_id`),
+  CONSTRAINT `Gymkhana_ibfk_1` FOREIGN KEY (`Pres_id`) REFERENCES `User` (`User_id`),
+  CONSTRAINT `Gymkhana_ibfk_2` FOREIGN KEY (`Faculty_id`) REFERENCES `User` (`User_id`),
+  CONSTRAINT `Gymkhana_ibfk_3` FOREIGN KEY (`Vice_pres_id`) REFERENCES `User` (`User_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Story_Section`
+--
+
+DROP TABLE IF EXISTS `Story_Section`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Story_Section` (
+  `User_id` int NOT NULL,
+  `User_type` varchar(20) NOT NULL,
+  `Posts` text NOT NULL,
+  `Like_count` int DEFAULT '0',
+  `Dislike_count` int DEFAULT '0',
+  `Timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`User_id`,`User_type`,`Timestamp`),
+  CONSTRAINT `Story_Section_ibfk_1` FOREIGN KEY (`User_id`, `User_type`) REFERENCES `User` (`User_id`, `User_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `User`
+--
+
+DROP TABLE IF EXISTS `User`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `User` (
+  `User_id` int NOT NULL,
+  `User_type` varchar(20) NOT NULL,
+  `User_name` varchar(100) NOT NULL,
+  `Phone` varchar(12) DEFAULT NULL,
+  `Email_id` varchar(100) NOT NULL,
+  `Department` varchar(100) DEFAULT NULL,
+  `Batch` varchar(20) DEFAULT NULL,
+  `Branch` varchar(100) DEFAULT NULL,
+  `Field` varchar(100) DEFAULT NULL,
+  `Announcements_pos` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`User_id`,`User_type`),
+  UNIQUE KEY `Email_id` (`Email_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `UserGymkhanaMembership`
+--
+
+DROP TABLE IF EXISTS `UserGymkhanaMembership`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `UserGymkhanaMembership` (
+  `User_id` int NOT NULL,
+  `gymkhana_name` varchar(100) NOT NULL,
+  `memberof` tinyint(1) DEFAULT '0',
+  `inpos` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`User_id`,`gymkhana_name`),
+  KEY `gymkhana_name` (`gymkhana_name`),
+  CONSTRAINT `UserGymkhanaMembership_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `User` (`User_id`) ON DELETE CASCADE,
+  CONSTRAINT `UserGymkhanaMembership_ibfk_2` FOREIGN KEY (`gymkhana_name`) REFERENCES `Gymkhana` (`Gymkhana_name`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-04-08  0:05:23
+-- Insert Users
+INSERT INTO User (User_id, User_type, User_name, Phone, Email_id, Department, Batch, Branch, Field, Announcements_pos) VALUES
+-- Students (User_id 1 to 10)
+(1, 'student', 'one', '1111111111', 'one@gmail.com', NULL, '2020', 'CSE', NULL, NULL),
+(2, 'student', 'two', '2222222222', 'two@gmail.com', NULL, '2021', 'ECE', NULL, NULL),
+(3, 'student', 'three', '3333333333', 'three@gmail.com', NULL, '2020', 'ME', NULL, NULL),
+(4, 'student', 'four', '4444444444', 'four@gmail.com', NULL, '2021', 'CE', NULL, NULL),
+(5, 'student', 'five', '5555555555', 'five@gmail.com', NULL, '2022', 'CSE', NULL, NULL),
+(6, 'student', 'six', '6666666666', 'six@gmail.com', NULL, '2020', 'ECE', NULL, NULL),
+(7, 'student', 'seven', '7777777777', 'seven@gmail.com', NULL, '2021', 'ME', NULL, NULL),
+(8, 'student', 'eight', '8888888888', 'eight@gmail.com', NULL, '2022', 'CE', NULL, NULL),
+(9, 'student', 'nine', '9999999999', 'nine@gmail.com', NULL, '2020', 'CSE', NULL, NULL),
+(10, 'student', 'ten', '1010101010', 'ten@gmail.com', NULL, '2021', 'ECE', NULL, NULL),
+-- Faculty (User_id 11 to 20)
+(11, 'faculty', 'eleven', '1111111111', 'eleven@gmail.com', 'Computer Science', NULL, NULL, NULL, NULL),
+(12, 'faculty', 'twelve', '1212121212', 'twelve@gmail.com', 'Electronics', NULL, NULL, NULL, NULL),
+(13, 'faculty', 'thirteen', '1313131313', 'thirteen@gmail.com', 'Mechanical', NULL, NULL, NULL, NULL),
+(14, 'faculty', 'fourteen', '1414141414', 'fourteen@gmail.com', 'Civil', NULL, NULL, NULL, NULL),
+(15, 'faculty', 'fifteen', '1515151515', 'fifteen@gmail.com', 'Computer Science', NULL, NULL, NULL, NULL),
+(16, 'faculty', 'sixteen', '1616161616', 'sixteen@gmail.com', 'Electronics', NULL, NULL, NULL, NULL),
+(17, 'faculty', 'seventeen', '1717171717', 'seventeen@gmail.com', 'Mechanical', NULL, NULL, NULL, NULL),
+(18, 'faculty', 'eighteen', '1818181818', 'eighteen@gmail.com', 'Civil', NULL, NULL, NULL, NULL),
+(19, 'faculty', 'nineteen', '1919191919', 'nineteen@gmail.com', 'Computer Science', NULL, NULL, NULL, NULL),
+(20, 'faculty', 'twenty', '2020202020', 'twenty@gmail.com', 'Electronics', NULL, NULL, NULL, NULL),
+-- Staff (User_id 21 to 30)
+(21, 'staff', 'twentyone', '2121212121', 'twentyone@gmail.com', NULL, NULL, NULL, 'IT', NULL),
+(22, 'staff', 'twentytwo', '2222222222', 'twentytwo@gmail.com', NULL, NULL, NULL, 'HR', NULL),
+(23, 'staff', 'twentythree', '2323232323', 'twentythree@gmail.com', NULL, NULL, NULL, 'Maintenance', NULL),
+(24, 'staff', 'twentyfour', '2424242424', 'twentyfour@gmail.com', NULL, NULL, NULL, 'Finance', NULL),
+(25, 'staff', 'twentyfive', '2525252525', 'twentyfive@gmail.com', NULL, NULL, NULL, 'IT', NULL),
+(26, 'staff', 'twentysix', '2626262626', 'twentysix@gmail.com', NULL, NULL, NULL, 'HR', NULL),
+(27, 'staff', 'twentyseven', '2727272727', 'twentyseven@gmail.com', NULL, NULL, NULL, 'Maintenance', NULL),
+(28, 'staff', 'twentyeight', '2828282828', 'twentyeight@gmail.com', NULL, NULL, NULL, 'Finance', NULL),
+(29, 'staff', 'twentynine', '2929292929', 'twentynine@gmail.com', NULL, NULL, NULL, 'IT', NULL),
+(30, 'staff', 'thirty', '3030303030', 'thirty@gmail.com', NULL, NULL, NULL, 'HR', NULL),
+-- Admin (User_id 31 to 40)
+(31, 'admin', 'thirtyone', '3131313131', 'thirtyone@gmail.com', 'Computer Science', NULL, NULL, NULL, NULL),
+(32, 'admin', 'thirtytwo', '3232323232', 'thirtytwo@gmail.com', 'Electronics', NULL, NULL, NULL, NULL),
+(33, 'admin', 'thirtythree', '3333333333', 'thirtythree@gmail.com', 'Mechanical', NULL, NULL, NULL, NULL),
+(34, 'admin', 'thirtyfour', '3434343434', 'thirtyfour@gmail.com', 'Civil', NULL, NULL, NULL, NULL),
+(35, 'admin', 'thirtyfive', '3535353535', 'thirtyfive@gmail.com', 'Computer Science', NULL, NULL, NULL, NULL),
+(36, 'admin', 'thirtysix', '3636363636', 'thirtysix@gmail.com', 'Electronics', NULL, NULL, NULL, NULL),
+(37, 'admin', 'thirtyseven', '3737373737', 'thirtyseven@gmail.com', 'Mechanical', NULL, NULL, NULL, NULL),
+(38, 'admin', 'thirtyeight', '3838383838', 'thirtyeight@gmail.com', 'Civil', NULL, NULL, NULL, NULL),
+(39, 'admin', 'thirtynine', '3939393939', 'thirtynine@gmail.com', 'Computer Science', NULL, NULL, NULL, NULL),
+(40, 'forty', 'forty@gmail.com', '4040404040', 'forty@gmail.com', 'Electronics', NULL, NULL, NULL, NULL);
+
+-- Insert Gymkhanas
+INSERT INTO Gymkhana (Gymkhana_name, Pres_id, Faculty_id, Vice_pres_id, Member_count, Funds) VALUES
+('Tech Club', 2, 11, 3, 0, FLOOR(RAND() * 100000) + 5000),
+('Music Society', 4, 12, 5, 0, FLOOR(RAND() * 100000) + 5000),
+('Drama Group', 6, 13, 7, 0, FLOOR(RAND() * 100000) + 5000),
+('Sports Team', 8, 14, 9, 0, FLOOR(RAND() * 100000) + 5000),
+('Art Circle', 10, 15, 1, 0, FLOOR(RAND() * 100000) + 5000);
+
+-- Insert UserGymkhanaMembership for leadership roles (inpos = 1)
+INSERT INTO UserGymkhanaMembership (User_id, gymkhana_name, memberof, inpos) VALUES
+(2, 'Tech Club', 0, 1),    -- President
+(11, 'Tech Club', 0, 1),   -- Faculty
+(3, 'Tech Club', 0, 1),    -- Vice-President
+(4, 'Music Society', 0, 1),-- President
+(12, 'Music Society', 0, 1),-- Faculty
+(5, 'Music Society', 0, 1),-- Vice-President
+(6, 'Drama Group', 0, 1),  -- President
+(13, 'Drama Group', 0, 1), -- Faculty
+(7, 'Drama Group', 0, 1),  -- Vice-President
+(8, 'Sports Team', 0, 1),  -- President
+(14, 'Sports Team', 0, 1), -- Faculty
+(9, 'Sports Team', 0, 1),  -- Vice-President
+(10, 'Art Circle', 0, 1),  -- President
+(15, 'Art Circle', 0, 1),  -- Faculty
+(1, 'Art Circle', 0, 1);   -- Vice-President
+
+-- Insert UserGymkhanaMembership for random members (memberof = 1)
+-- Randomly select 20 users to be members (max Member_count constraint)
+INSERT INTO UserGymkhanaMembership (User_id, gymkhana_name, memberof, inpos) VALUES
+(16, 'Tech Club', 1, 0),
+(17, 'Tech Club', 1, 0),
+(18, 'Tech Club', 1, 0),
+(19, 'Tech Club', 1, 0),
+(20, 'Tech Club', 1, 0),
+(21, 'Music Society', 1, 0),
+(22, 'Music Society', 1, 0),
+(23, 'Music Society', 1, 0),
+(24, 'Music Society', 1, 0),
+(25, 'Music Society', 1, 0),
+(26, 'Drama Group', 1, 0),
+(27, 'Drama Group', 1, 0),
+(28, 'Drama Group', 1, 0),
+(29, 'Drama Group', 1, 0),
+(30, 'Drama Group', 1, 0),
+(31, 'Sports Team', 1, 0),
+(32, 'Sports Team', 1, 0),
+(33, 'Sports Team', 1, 0),
+(34, 'Sports Team', 1, 0),
+(35, 'Sports Team', 1, 0);
+
+-- Update Gymkhana Member_count based on UserGymkhanaMembership
+UPDATE Gymkhana g
+SET Member_count = (
+    SELECT COUNT(*) 
+    FROM UserGymkhanaMembership ugm 
+    WHERE ugm.gymkhana_name = g.Gymkhana_name AND ugm.memberof = 1
+);
+
+-- Insert Stories (20 random stories from users 1-40)
+INSERT INTO Story_Section (User_id, User_type, Posts, Like_count, Dislike_count, Timestamp) VALUES
+(1, 'student', 'Enjoying my first coding project!', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:00:00'),
+(5, 'student', 'Just finished a great music session!', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:05:00'),
+(12, 'faculty', 'Teaching a new algorithm today.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:10:00'),
+(18, 'faculty', 'Excited for the upcoming workshop!', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:15:00'),
+(23, 'staff', 'Organizing the event logistics.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:20:00'),
+(27, 'staff', 'New office supplies arrived!', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:25:00'),
+(32, 'admin', 'Updating the system security.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:30:00'),
+(36, 'admin', 'Planning the next admin meeting.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:35:00'),
+(3, 'student', 'Loving the drama rehearsals!', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:40:00'),
+(7, 'student', 'Scored a goal today!', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:45:00'),
+(14, 'faculty', 'Grading papers all day.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:50:00'),
+(19, 'faculty', 'New research paper published!', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 10:55:00'),
+(24, 'staff', 'Setting up the auditorium.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 11:00:00'),
+(28, 'staff', 'Lunch break time!', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 11:05:00'),
+(33, 'admin', 'New policy draft completed.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 11:10:00'),
+(37, 'admin', 'Server maintenance scheduled.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 11:15:00'),
+(9, 'student', 'Painting a new masterpiece!', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 11:20:00'),
+(4, 'student', 'Group study session today.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 11:25:00'),
+(16, 'faculty', 'Lecture on AI fundamentals.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 11:30:00'),
+(20, 'faculty', 'Attending a conference tomorrow.', FLOOR(RAND() * 100), FLOOR(RAND() * 50), '2025-04-07 11:35:00');
+
+-- Insert Announcements (10 random announcements from 5 gymkhanas)
+INSERT INTO Announcements (Gymkhana_name, Announcement_message, Timestamp) VALUES
+('Tech Club', 'Next coding competition on April 15th!', '2025-04-07 12:00:00'),
+('Music Society', 'Rehearsal scheduled for tomorrow at 5 PM.', '2025-04-07 12:05:00'),
+('Drama Group', 'Auditions for new play next week!', '2025-04-07 12:10:00'),
+('Sports Team', 'Training session at 6 AM tomorrow.', '2025-04-07 12:15:00'),
+('Art Circle', 'Art exhibition opening on April 20th!', '2025-04-07 12:20:00'),
+('Tech Club', 'Submit your project ideas by April 10th.', '2025-04-07 12:25:00'),
+('Music Society', 'Concert tickets available now!', '2025-04-07 12:30:00'),
+('Drama Group', 'Rehearsal canceled due to weather.', '2025-04-07 12:35:00'),
+('Sports Team', 'New sports gear distributed today.', '2025-04-07 12:40:00'),
+('Art Circle', 'Call for artists for next event!', '2025-04-07 12:45:00');

@@ -21,6 +21,7 @@ public class StoryDAO {
             stmt.setInt(5, story.getDislikeCount());
             stmt.setTimestamp(6, Timestamp.valueOf(story.getTimestamp()));
             stmt.executeUpdate();
+            System.err.println("querry executed : "+query);
             System.out.println("Story added to database");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -32,7 +33,9 @@ public class StoryDAO {
         String query = "SELECT u.User_name, s.Posts, s.Like_count, s.Dislike_count, s.User_id, s.User_type, s.Timestamp FROM Story_Section s JOIN User u ON s.User_id = u.User_id AND s.User_type = u.User_type ORDER BY s.Timestamp DESC";
         try (Connection conn = DatabaseConnection.getConnection(); 
              PreparedStatement stmt = conn.prepareStatement(query); 
-             ResultSet rs = stmt.executeQuery()) {
+             ResultSet rs = stmt.executeQuery()
+             ) {
+            System.err.println("querry executed : "+query);
             while (rs.next()) {
                 String userName = rs.getString("User_name");
                 String posts = rs.getString("Posts");
@@ -53,6 +56,7 @@ public class StoryDAO {
         String query = "UPDATE Story_Section SET Like_count = Like_count + ? WHERE User_id = ? AND User_type = ? AND Timestamp = ?";
         try (Connection conn = DatabaseConnection.getConnection(); 
              PreparedStatement stmt = conn.prepareStatement(query)) {
+            System.err.println("querry executed : "+query);
             stmt.setInt(1, increment ? 1 : -1);
             stmt.setInt(2, userId);
             stmt.setString(3, userType);
@@ -68,6 +72,7 @@ public class StoryDAO {
         String query = "UPDATE Story_Section SET Dislike_count = Dislike_count + ? WHERE User_id = ? AND User_type = ? AND Timestamp = ?";
         try (Connection conn = DatabaseConnection.getConnection(); 
              PreparedStatement stmt = conn.prepareStatement(query)) {
+            System.err.println("querry executed : "+query);
             stmt.setInt(1, increment ? 1 : -1);
             stmt.setInt(2, userId);
             stmt.setString(3, userType);

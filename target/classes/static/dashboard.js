@@ -514,7 +514,10 @@ function submitAssignFacultyForm(e) {
     })
     .then(response => response.text())
     .then(data => { console.log('Assign faculty response:', data); loadGymkhanas(); closeForm('assign-faculty-form'); })
-    .catch(error => console.error('Error assigning faculty:', error));
+    .catch(error => {
+        console.error('Error assign faculty:', error);
+        alert('Failed to assign faculty: ' + error.message);
+    });
 }
 
 function openSetBudgetForm(gymkhanaName, buttonElement) {
@@ -525,7 +528,7 @@ function openSetBudgetForm(gymkhanaName, buttonElement) {
         document.getElementById('set-budget-gymkhana').value = gymkhanaName;
         budgetForm.style.position = 'absolute';
         budgetForm.style.top = (buttonElement.offsetTop + buttonElement.offsetHeight); // Position below the button
-        budgetForm.style.left = buttonElement.offsetLeft ; // Align with the button's left edge
+        budgetForm.style.left = buttonElement.offsetLeft; // Align with the button's left edge
         budgetForm.style.zIndex = '1000';
     } else {
         console.error('set-budget-form not found in DOM');
@@ -562,7 +565,10 @@ function openAssignPresForm(gymkhanaName) {
         })
         .then(response => response.text())
         .then(data => { console.log('Assign president response:', data); loadGymkhanas(); })
-        .catch(error => console.error('Error assigning president:', error));
+        .catch(error => {
+            console.error('Error assign president:', error);
+            alert('Failed to assign president: ' + error.message);
+        });
     }
 }
 
@@ -577,7 +583,10 @@ function openAssignVicePresForm(gymkhanaName) {
         })
         .then(response => response.text())
         .then(data => { console.log('Assign vice-president response:', data); loadGymkhanas(); })
-        .catch(error => console.error('Error assigning vice-president:', error));
+        .catch(error => {
+            console.error('Error assign vice president:', error);
+            alert('Failed to assign vice president: ' + error.message);
+        });
     }
 }
 
@@ -592,9 +601,21 @@ function handleJoinGymkhana(gymkhanaName) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })
-    .then(response => response.text())
-    .then(data => { console.log('Join gymkhana response:', data); loadGymkhanas(); })
-    .catch(error => console.error('Error joining gymkhana:', error));
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text || 'Failed to join gymkhana'); });
+        }
+        return response.text();
+    })
+    .then(data => {
+        console.log('Join gymkhana response:', data);
+        loadGymkhanas();
+        alert('Successfully joined the gymkhana!');
+    })
+    .catch(error => {
+        console.error('Error joining gymkhana:', error);
+        alert('Failed to join gymkhana: ' + error.message);
+    });
 }
 
 // Add form submission event listeners
@@ -606,6 +627,4 @@ document.getElementById('nav-clubs').addEventListener('click', function() {
     loadGymkhanas();
 });
 loadGymkhanas();
-
-// ... (rest of the file remains unchanged)
 

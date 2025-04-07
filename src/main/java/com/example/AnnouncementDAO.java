@@ -10,10 +10,11 @@ import java.util.List;
 public class AnnouncementDAO {
     public static List<Announcement> getAllAnnouncements() {
         List<Announcement> announcements = new ArrayList<>();
-        String query = "SELECT * FROM Announcements";
+        String query = "SELECT * FROM Announcements ORDER BY Announcement_id DESC;";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
+                System.out.println("querry executed : "+query);
             while (rs.next()) {
                 announcements.add(new Announcement(
                     rs.getInt("Announcement_id"),
@@ -36,6 +37,7 @@ public class AnnouncementDAO {
                  PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
                 checkStmt.setString(1, announcement.getGymkhanaName());
                 ResultSet rs = checkStmt.executeQuery();
+                System.out.println("querry executed : "+checkQuery);
                 if (rs.next() && rs.getInt(1) == 0) {
                     throw new RuntimeException("Invalid Gymkhana name: " + announcement.getGymkhanaName());
                 }
@@ -52,6 +54,7 @@ public class AnnouncementDAO {
             stmt.setString(2, announcement.getAnnouncementMessage());
             stmt.setString(3, announcement.getTimestamp() != null ? announcement.getTimestamp() : new java.sql.Timestamp(System.currentTimeMillis()).toString());
             stmt.executeUpdate();
+            System.out.println("querry executed : "+query);
             System.out.println("Announcement added");
         } catch (SQLException e) {
             e.printStackTrace();
