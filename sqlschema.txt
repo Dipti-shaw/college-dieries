@@ -288,3 +288,17 @@ INSERT INTO Announcements (Gymkhana_name, Announcement_message, Timestamp) VALUE
 ('Drama Group', 'Rehearsal canceled due to weather.', '2025-04-07 12:35:00'),
 ('Sports Team', 'New sports gear distributed today.', '2025-04-07 12:40:00'),
 ('Art Circle', 'Call for artists for next event!', '2025-04-07 12:45:00');
+
+INSERT INTO Gymkhana (Gymkhana_name, Pres_id, Faculty_id, Vice_pres_id, Member_count, Funds) VALUES
+('General', NULL, NULL, NULL, 0, 0);
+
+UPDATE User u
+JOIN UserGymkhanaMembership ugm ON u.User_id = ugm.User_id
+JOIN Gymkhana g ON ugm.gymkhana_name = g.Gymkhana_name
+SET u.Announcements_pos = CASE
+    WHEN g.Pres_id = u.User_id THEN CONCAT(g.Gymkhana_name, '-President')
+    WHEN g.Vice_pres_id = u.User_id THEN CONCAT(g.Gymkhana_name, '-Vice-President')
+    WHEN g.Faculty_id = u.User_id THEN CONCAT(g.Gymkhana_name, '-Faculty')
+    ELSE u.Announcements_pos
+END
+WHERE ugm.inpos = 1;
