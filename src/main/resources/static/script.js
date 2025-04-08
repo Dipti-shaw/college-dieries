@@ -47,7 +47,7 @@ document.getElementById('signup-form').addEventListener('submit', function(e) {
         department: document.getElementById('signup-department').value,
         batch: document.getElementById('signup-batch').value,
         branch: document.getElementById('signup-branch').value,
-        field: document.getElementById('signup-field').value // Map "Position" to field
+        field: document.getElementById('signup-field').value
     };
     
     fetch('http://localhost:8080/api/users/signup', {
@@ -57,9 +57,15 @@ document.getElementById('signup-form').addEventListener('submit', function(e) {
         },
         body: JSON.stringify(userData)
     })
-    .then(response => response.text())
+    .then(response => {
+        // Check if the response is successful (status code 200-299)
+        if (!response.ok) {
+            throw new Error('Signup failed with status: ' + response.status);
+        }
+        return response.text();
+    })
     .then(data => {
-        // alert(data); // Removed this line to eliminate the popup
+        // Only proceed if signup was successful
         document.getElementById('signup-form').style.display = 'none';
         document.getElementById('login-form').style.display = 'block';
         localStorage.setItem('isLoggedIn', 'true');
@@ -68,9 +74,14 @@ document.getElementById('signup-form').addEventListener('submit', function(e) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Signup failed');
+        alert('Signup failed',error);
     });
 });
 
+// Remove this line - it shouldn't set isLoggedIn to true by default
+// localStorage.setItem('isLoggedIn', 'true');
+
 // Check if user is already logged in
-localStorage.setItem('isLoggedIn', 'true');
+if (localStorage.getItem('isLoggedIn') === 'true') {
+    window.location.href = 'dashboard.html';
+}

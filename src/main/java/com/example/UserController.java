@@ -1,7 +1,9 @@
 package com.example;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,23 +20,28 @@ public class UserController {
     private final StoryDAO storyDAO = new StoryDAO();
     private final BazaarDAO bazaarDAO = new BazaarDAO();
 
-    @PostMapping("/signup")
+@PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody User user) {
         try {
             userDAO.addUser(user);
-            return ResponseEntity.ok("User registered successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
+            return ResponseEntity.ok("User signed up successfully");
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Signup failed: " + e.getMessage());
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestParam int userId, @RequestParam String userType) {
-        User user = userDAO.getUser(userId, userType);
-        if (user != null) {
-            return ResponseEntity.ok(user);
+        try {
+            User user = userDAO.getUser(userId, userType);
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        return ResponseEntity.badRequest().body(null);
     }
 
     @PostMapping("/stories")
