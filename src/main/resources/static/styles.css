@@ -1,139 +1,152 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
+body {
+    background: url('hogwarts-2h5rh3z2vkebpcvf.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #ecf0f1;
+}
 
-        body {
-            background-color: #f5f7fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #333;
-        }
+#auth-container {
+    width: 100%;
+    max-width: 450px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(5px);
+}
 
-        #auth-container {
-            width: 100%;
-            max-width: 450px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            position: relative;
-        }
+.form-container {
+    padding: 40px;
+    transition: all 0.3s ease;
+}
 
-        .form-container {
-            padding: 40px;
-            transition: all 0.3s ease;
-        }
+h2 {
+    color: #f1c40f;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 700;
+}
 
-        h2 {
-            color: #2c3e50;
-            margin-bottom: 25px;
-            text-align: center;
-            font-weight: 700;
-        }
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #ecf0f1;
+}
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #2c3e50;
-        }
+input, select {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #7f8c8d;
+    border-radius: 6px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ecf0f1;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 18px;
+}
 
-        input, select {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border 0.3s;
-        }
+input:focus, 
+select:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: #9b59b6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.3);
+}
 
-        input:focus, select:focus {
-            border-color: #3498db;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
+select option {
+    background-color: #1a1a1a;
+    color: #ecf0f1;
+    padding: 10px;
+}
 
-        button {
-            width: 100%;
-            padding: 14px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
 
-        button:hover {
-            background-color: #2980b9;
-        }
+button:hover {
+    background-color: #732d91;
+}
 
-        p {
-            text-align: center;
-            margin-top: 20px;
-            color: #7f8c8d;
-        }
+p {
+    text-align: center;
+    margin-top: 20px;
+    color: #bdc3c7;
+}
 
-        a {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-        }
+a {
+    color: #f1c40f;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+}
 
-        a:hover {
-            text-decoration: underline;
-        }
+a:hover {
+    text-decoration: underline;
+}
 
-        .form-footer {
-            margin-top: 25px;
-            font-size: 14px;
-        }
+.form-footer {
+    margin-top: 25px;
+    font-size: 14px;
+}
 
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
 
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 42px;
-            color: #95a5a6;
-        }
+.input-group i {
+    position: absolute;
+    left: 15px;
+    top: 42px;
+    color: #95a5a6;
+}
 
-        .input-group input, .input-group select {
-            padding-left: 40px;
-        }
+.input-group input, 
+.input-group select {
+    padding-left: 40px;
+}
 
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        .logo i {
-            font-size: 50px;
-            color: #3498db;
-            margin-bottom: 10px;
-        }
+.logo i {
+    font-size: 50px;
+    color: #f1c40f;
+    margin-bottom: 10px;
+}
 
-        @media (max-width: 480px) {
-            .form-container {
-                padding: 30px 20px;
-            }
-        }
-
-
-
-
-    
+@media (max-width: 480px) {
+    .form-container {
+        padding: 30px 20px;
+    }
+}
