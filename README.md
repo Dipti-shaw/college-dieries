@@ -33,6 +33,32 @@ college-diaries/
 │
 └── pom.xml                    # Maven configuration
 ```
+## 🖼️ Screenshots
+
+### 🔐 Login Page
+![Login](screenshots/login.png)
+
+### 📝 Signup Page
+![Signup](screenshots/signup.png)
+
+### 🏠 Home Page
+![Home](screenshots/home.png)
+
+### 🛍️ Bazar Section
+![Bazar](screenshots/bazar.png)
+
+### 📢 Announcement Section
+![Announcement](screenshots/announcement.png)
+
+### 👤 Profile Section
+![Profile](screenshots/profile.png)
+
+### 🏛️ Gymkhana Section
+![Gymkhana](screenshots/gymkhana.png)
+
+### 📚 Story Section
+![Story](screenshots/story.png)
+
 
 ## 🛠️ Setup Instructions
 
